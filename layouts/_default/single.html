@@ -1,7 +1,7 @@
 {{ define "main" }}
 
   <main>
-    <article {{ if not .Params.sitemapExclude }}data-pagefind-body{{ end }}>
+    <article {{ if not (or .Params.sitemapExclude .Params.noindex) }}data-pagefind-body{{ end }}>
       <header>
         
         <h1>{{ .Title | emojify }}</h1>

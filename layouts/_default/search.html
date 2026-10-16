@@ -13,20 +13,17 @@
       <!-- Info -->
     </div>
 
-    <ul
-      id="search-results"
-      class="posts"
-    />
+    <ul id="search-results" class="posts">
       <!-- Results -->
     </ul>
 
-    <nav>
+    <nav aria-label="{{ T "ariaPagination" }}">
       <ul class="pagination hidden">
 
         <li class="back first">
           <a class="btn" href="#" aria-label="{{ T "ariaGoToFirst" }}">
             <svg transform="rotate(180)" aria-hidden="true">
-              <use xlink:href="{{ $svgBundleLink }}#angle-double-right">
+              <use xlink:href="{{ $svgBundleLink }}#angle-double-right"/>
             </svg>
           </a>
         </li>
@@ -34,7 +31,7 @@
         <li class="back prev">
           <a class="btn" href="#" aria-label="{{ T "ariaGoToPrev" }}">
             <svg transform="rotate(180)" aria-hidden="true">
-              <use xlink:href="{{ $svgBundleLink }}#angle-right">
+              <use xlink:href="{{ $svgBundleLink }}#angle-right"/>
             </svg>
           </a>
         </li>
@@ -51,7 +48,7 @@
         <li class="advance next">
           <a class="btn" href="#" aria-label="{{ T "ariaGoToNext" }}">
             <svg aria-hidden="true">
-              <use xlink:href="{{ $svgBundleLink }}#angle-right">
+              <use xlink:href="{{ $svgBundleLink }}#angle-right"/>
             </svg>
           </a>
         </li>
@@ -59,7 +56,7 @@
         <li class="advance last">
           <a class="btn" href="#" aria-label="{{ T "ariaGoToLast" }}">
             <svg aria-hidden="true">
-              <use xlink:href="{{ $svgBundleLink }}#angle-double-right">
+              <use xlink:href="{{ $svgBundleLink }}#angle-double-right"/>
             </svg>
           </a>
         </li>

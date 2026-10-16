@@ -71,10 +71,10 @@ if (searchQuery) {
     .value = searchQuery;
 
   executeSearch(searchQuery);
-  report('{{ T "searchProcessing" }}');
+  report({{ T "searchProcessing" | jsonify }});
 
 } else {
-  report('{{ T "searchAwaitingSearch" }}');
+  report({{ T "searchAwaitingSearch" | jsonify }});
 }
 
 
@@ -217,31 +217,40 @@ function renderPage(pagers, index, totalPages) {
 
 
 async function executeSearch(searchQuery) {
-  const pagefind = await import('/pagefind/pagefind.js');
-  const search = await pagefind.search(searchQuery);
-  return await Promise.all(search.results.map(r => r.data()))
+  let output;
 
-  .then((output) => {
-    const limit = {{ .Site.Params.Search.maxResults | default 50 }};
-    searchInfo.firstElementChild.remove();
-    report('{{ T "searchResultsFor" }}: ' + searchQuery);
+  try {
+    // Relative to the base URL, so sites in a subdirectory work too
+    const pagefind = await import({{ "pagefind/pagefind.js" | relURL | jsonify }});
+    const search = await pagefind.search(searchQuery);
+    output = await Promise.all(search.results.map(r => r.data()));
+  } catch (e) {
+    // Most likely, Pagefind didn't index the site
+    console.error(e);
+    searchInfo.replaceChildren();
+    report({{ T "searchNoPageFound" | jsonify }}, 'error');
+    return;
+  }
 
-    const matches = output.length;
+  const limit = {{ .Site.Params.Search.maxResults | default 30 }};
+  searchInfo.firstElementChild.remove();
+  report({{ T "searchResultsFor" | jsonify }} + ': ' + searchQuery);
 
-    if (matches > 0) {
-      if (matches === 1) {
-        report('{{ T "searchOnePageFound" }}.');
-      } else if (1 < matches && matches < limit + 1) {
-        report(matches + ' {{ T "searchPagesFound" }}.');
-      } else {
-        report('{{ T "searchTooMany" }}', 'error');
-      }
+  const matches = output.length;
+
+  if (matches > 0) {
+    if (matches === 1) {
+      report({{ T "searchOnePageFound" | jsonify }} + '.');
+    } else if (1 < matches && matches < limit + 1) {
+      report(matches + ' ' + {{ T "searchPagesFound" | jsonify }} + '.');
     } else {
-      report('{{ T "searchNoPageFound" }}', 'error');
+      report({{ T "searchTooMany" | jsonify }}, 'error');
     }
+  } else {
+    report({{ T "searchNoPageFound" | jsonify }}, 'error');
+  }
 
-    if (0 < matches && matches < limit + 1) {
-      populateResults(output, matches);
-    }
-  });
+  if (0 < matches && matches < limit + 1) {
+    populateResults(output, matches);
+  }
 }
