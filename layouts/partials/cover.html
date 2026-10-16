@@ -8,14 +8,7 @@
 {{ $imgProcConfig := partialCached "utilities/image-processing-config" . }}
 
 
-<!-- Default image path -->
-{{ $imgPath := .Page.Param "imgPath" }}
-
-{{ if $imgPath }}
-  {{ $file = path.Join $imgPath .Params.cover }}
-{{ end }}
-
-{{ $inputFile := .Page.Resources.GetMatch $file }}
+{{ $inputFile := partial "utilities/page-image" (dict "page" .Page "file" .Params.cover) }}
 
 
 {{ with partial "utilities/image-processing" (dict "context" . "input" $inputFile "config" $imgProcConfig) }}

@@ -21,14 +21,7 @@
 {{ end }}
 
 
-<!-- Default image path -->
-{{ $imgPath := .Page.Param "imgPath" }}
-
-{{ if $imgPath }}
-  {{ $file = path.Join $imgPath $file }}
-{{ end }}
-
-{{ $inputFile := .Page.Resources.GetMatch $file }}
+{{ $inputFile := partial "utilities/page-image" (dict "page" .Page "file" $file) }}
 
 
 {{ with partial "utilities/image-processing" (dict "context" . "input" $inputFile "config" $imgProcConfig) }}

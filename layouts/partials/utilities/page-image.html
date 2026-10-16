@@ -1,0 +1,30 @@
+{{- /*
+  Finds an image in a page bundle: in the "imgPath" folder first, then as
+  given. Returns false if it isn't there (a URL, or a file in "static")
+
+  Params (dict):
+    page  Page the image belongs to
+    file  File name or path, relative to the page bundle
+*/ -}}
+
+{{- $page := .page -}}
+{{- $file := .file -}}
+{{- $found := false -}}
+
+{{- with $file -}}
+  {{- with $page.Param "imgPath" -}}
+    {{- $found = $page.Resources.GetMatch (path.Join . $file) -}}
+  {{- end -}}
+
+  {{- if not $found -}}
+    {{- $found = $page.Resources.GetMatch $file -}}
+  {{- end -}}
+
+  <!-- A relative path that isn't in the bundle would be a broken link -->
+  {{- $url := urls.Parse $file -}}
+  {{- if and (not $found) (not $url.Scheme) (not $url.Host) (not (hasPrefix $file "/")) -}}
+    {{- warnf "%s: can't find %q in the page bundle" (cond (ne $page.File nil) (string $page.File.Path) $page.RelPermalink) $file -}}
+  {{- end -}}
+{{- end -}}
+
+{{- return (or $found false) -}}

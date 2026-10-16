@@ -1,4 +1,3 @@
-{{ $file := .Params.cover }}
 {{ $coverAlt := .Params.coverAlt | default .Site.Params.coverAlt }}
 
 
@@ -8,19 +7,12 @@
 {{ $resize := $imgProcConfig.autoResize }}
 
 
-<!-- Default image path -->
-{{ $imgPath := .Page.Param "imgPath" }}
-
-{{ if $imgPath }}
-  {{ $file = path.Join $imgPath .Params.cover }}
-{{ end }}
-
 {{ $inputFile := false }}
 
 {{ if and .Site.Params.cover (not .Params.cover) }}
   {{ $inputFile = resources.Get .Site.Params.cover }}
 {{ else }}
-  {{ $inputFile = .Page.Resources.GetMatch $file }}
+  {{ $inputFile = partial "utilities/page-image" (dict "page" .Page "file" .Params.cover) }}
 {{ end }}
 
 

@@ -189,7 +189,7 @@ Besides Hugo's own (`title`, `date`, `lastmod`, `tags`, `categories`, `draft`, .
 | `disableTitleSeparator` | `true` leaves the site title out of the `<title>` tag. |
 | `sitemapExclude` | `true` leaves the page out of the sitemap and search. |
 | `noindex` | `true` asks search engines not to index the page, and leaves it out of search. |
-| `imgPath`, `videoPath` | Folder of the page bundle to look for images and videos in. |
+| `imgPath`, `videoPath` | Folder of the page bundle to look for images and videos in, before the bundle root. |
 | `markupImgClass` | Class for Markdown images: `border` or `borderless`. |
 
 The `archetypes` folder has templates for posts (`default`), the home page (`home`), math posts (`katex`), standalone pages (`page`) and the search page (`search`):
@@ -207,6 +207,8 @@ Cover images are also cropped for Open Graph (1200×630) and Twitter Cards (1280
 In dark mode, images are slightly dimmed (except SVG).
 
 See [Image processing](#image-processing) to change the sizes.
+
+A relative image that isn't in the page bundle gets a build warning (`can't find "photo.jpg" in the page bundle`), as it would be a broken link.
 
 ### Videos
 
@@ -451,8 +453,9 @@ copyright = "Copyright © 2025, Jane Doe; All rights reserved."
   # Shows a message in the footer when JavaScript is disabled (false)
   hasNoscriptNotice = true
 
-  # Default folders for images and videos in page bundles (no default
-  # for images, "video" for videos). Can also be set per page
+  # Folders of the page bundle to look for images and videos in, before
+  # the bundle root (no default for images, "video" for videos). Can also
+  # be set per page
   imgPath   = "img"
   videoPath = "video"
 
