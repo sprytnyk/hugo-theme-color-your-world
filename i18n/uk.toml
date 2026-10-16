@@ -168,6 +168,9 @@ other = " та "
 
 # Misc
 
+[playVideo]
+other = "Відтворити відео"
+
 [missingCodec]
 other = "Браузер не підтримує HTML5 аудіо/відео."
 

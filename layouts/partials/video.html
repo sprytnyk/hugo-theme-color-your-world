@@ -1,0 +1,112 @@
+{{- /*
+  Renders a <video> element, used by the "video" shortcode and the image
+  render hook (for Markdown like "![Caption](clip.mp4)")
+
+  Params (dict):
+    page      Page the video belongs to (required)
+    src       Page resource name (also looked up in "videoPath") or URL
+    poster    Page resource name or URL. If not set, an image with the same
+              name as the video (clip.jpg, clip.png, clip.webp) is used
+    caption   Caption (Markdown)
+    captionHTML  Caption, already rendered (from a render hook)
+    title     Accessible name, defaults to the caption
+    class     Extra classes
+    autoplay  Plays muted and in loop, like a GIF (bool)
+    loop      (bool)
+    muted     (bool)
+    controls  Defaults to true, unless autoplay is set
+    figure    Wrap in a <figure> (bool, default true)
+
+  Other formats with the same name (clip.mp4 + clip.webm) are added as extra
+  sources, smallest file first. A clip.vtt file is added as captions.
+*/ -}}
+
+{{- $page := .page -}}
+{{- $src := .src -}}
+
+{{- $videoPath := $page.Param "videoPath" | default "video" -}}
+{{- $videoFormats := slice "mp4" "webm" "ogv" "mov" "m4v" -}}
+{{- $imageFormats := slice "jpg" "jpeg" "png" "webp" "avif" -}}
+
+<!-- Look for the file in the page bundle -->
+{{- $resource := or ($page.Resources.Get $src) ($page.Resources.Get (path.Join $videoPath $src)) -}}
+
+{{- $sources := slice -}}
+{{- $poster := "" -}}
+{{- $track := false -}}
+
+{{- with $resource -}}
+  {{- $base := strings.TrimSuffix (path.Ext .Name) .Name -}}
+
+  {{- $files := slice -}}
+  {{- range $videoFormats -}}
+    {{- with $page.Resources.Get (printf "%s.%s" $base .) -}}
+      {{- $files = $files | append (dict "src" .RelPermalink "type" .MediaType.Type "size" (len .Content)) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $sources = sort $files "size" -}}
+
+  {{- range $imageFormats -}}
+    {{- if not $poster -}}
+      {{- with $page.Resources.Get (printf "%s.%s" $base .) -}}
+        {{- $poster = .RelPermalink -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- $track = $page.Resources.Get (printf "%s.vtt" $base) -}}
+{{- else -}}
+  <!-- Not in the bundle, assume it's a URL -->
+  {{- $sources = slice (dict "src" $src "type" "") -}}
+{{- end -}}
+
+{{- with .poster -}}
+  {{- with or ($page.Resources.Get .) ($page.Resources.Get (path.Join $videoPath .)) -}}
+    {{- $poster = .RelPermalink -}}
+  {{- else -}}
+    {{- $poster = . -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $autoplay := .autoplay | default false -}}
+{{- $controls := cond (isset . "controls") .controls (not $autoplay) -}}
+{{- $loop := or .loop $autoplay -}}
+{{- $muted := or .muted $autoplay -}}
+{{- $caption := .captionHTML | default (.caption | default "" | markdownify) -}}
+{{- $title := .title | default ($caption | plainify | htmlUnescape) -}}
+{{- $figure := cond (isset . "figure") .figure true -}}
+
+{{- $video := "" -}}
+
+{{- if $sources -}}
+  {{- $video = printf `<video%s%s%s%s%s playsinline preload="metadata"%s%s>`
+    (cond $controls " controls" "")
+    (cond $autoplay " autoplay" "")
+    (cond $loop " loop" "")
+    (cond $muted " muted" "")
+    (cond (ne $poster "") (printf ` poster="%s"` ($poster | htmlEscape)) "")
+    (cond (ne $title "") (printf ` aria-label="%s"` ($title | htmlEscape)) "")
+    (cond (and (not $figure) (ne (.class | default "") "")) (printf ` class="%s"` (.class | htmlEscape)) "")
+  -}}
+
+  {{- range $sources -}}
+    {{- $video = printf `%s<source src="%s"%s>` $video (.src | htmlEscape) (cond (ne .type "") (printf ` type="%s"` .type) "") -}}
+  {{- end -}}
+
+  {{- with $track -}}
+    {{- $video = printf `%s<track kind="captions" src="%s" srclang="%s" label="%s" default>` $video .RelPermalink $page.Language.Lang $page.Language.LanguageName -}}
+  {{- end -}}
+
+  {{- $video = printf `%s<p class="error">%s</p></video>` $video (T "missingCodec") -}}
+{{- end -}}
+
+{{- if $figure -}}
+  <figure class="video{{ with .class }} {{ . }}{{ end }}">
+    {{ $video | safeHTML }}
+    {{- with $caption }}
+      <figcaption>{{ . | safeHTML }}</figcaption>
+    {{- end }}
+  </figure>
+{{- else -}}
+  {{ $video | safeHTML }}
+{{- end -}}

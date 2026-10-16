@@ -1,0 +1,95 @@
+<!--
+  Overrides Hugo's built-in "youtube" shortcode with a lighter, privacy-aware
+  embed: a thumbnail with a play button, and the player is only loaded when
+  it's clicked. Without JavaScript, it's a link to the video.
+
+  The thumbnail and title are downloaded at build time, so visitors don't
+  connect to YouTube until they press play.
+
+  Usage:
+    youtube "dQw4w9WgXcQ"
+    youtube id="dQw4w9WgXcQ" title="Custom title" start=30 end=90
+    youtube id="dQw4w9WgXcQ" caption="A caption, *Markdown* allowed."
+
+  Respects the "privacy.youtube" config:
+    disable = true          Renders only the link
+    privacyEnhanced = true  Plays from youtube-nocookie.com
+-->
+
+{{- $id := .Get "id" | default (.Get 0) -}}
+
+{{- if not $id -}}
+  {{- errorf "The %q shortcode requires a video ID. See %s" .Name .Position -}}
+{{- end -}}
+
+{{- $privacy := site.Config.Privacy.YouTube -}}
+
+{{- $start := .Get "start" -}}
+{{- $end := .Get "end" -}}
+{{- $caption := .Get "caption" -}}
+
+
+<!-- Title, from the shortcode or YouTube's oEmbed endpoint -->
+{{- $title := .Get "title" -}}
+
+{{- if not $title -}}
+  {{- $oembed := printf "https://www.youtube.com/oembed?format=json&url=%s" (printf "https://www.youtube.com/watch?v=%s" $id | urlquery) -}}
+
+  {{- with try (resources.GetRemote $oembed) -}}
+    {{- with .Err -}}
+      {{- warnf "youtube: unable to get the title of %q: %s" $id . -}}
+    {{- else with .Value -}}
+      {{- $title = (. | transform.Unmarshal).title -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $title = $title | default "YouTube" -}}
+
+
+<!-- Thumbnail, stored with the site. Not every video has a "maxres" one -->
+{{- $thumbnail := false -}}
+
+{{- range slice "maxresdefault" "hqdefault" -}}
+  {{- if not $thumbnail -}}
+    {{- with try (resources.GetRemote (printf "https://i.ytimg.com/vi/%s/%s.jpg" $id .)) -}}
+      {{- with .Value -}}
+        {{- $thumbnail = .Fill "1280x720 webp q80" | resources.Copy (printf "img/youtube/%s.webp" $id) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+
+<!-- Links -->
+{{- $watch := printf "https://www.youtube.com/watch?v=%s" $id -}}
+{{- with $start }}{{ $watch = printf "%s&t=%vs" $watch . }}{{ end -}}
+
+{{- $query := dict "autoplay" 1 "rel" 0 -}}
+{{- with $start }}{{ $query = merge $query (dict "start" .) }}{{ end -}}
+{{- with $end }}{{ $query = merge $query (dict "end" .) }}{{ end -}}
+
+{{- $host := cond $privacy.PrivacyEnhanced "www.youtube-nocookie.com" "www.youtube.com" -}}
+{{- $embed := printf "https://%s/embed/%s?%s" $host $id (collections.Querify $query) -}}
+
+
+<figure class="youtube{{ with .Get "class" }} {{ . }}{{ end }}">
+  <a
+    class="youtube-link"
+    href="{{ $watch }}"
+    {{ if not $privacy.Disable }}data-embed="{{ $embed }}"{{ end }}
+    data-title="{{ $title }}"
+    aria-label="{{ T "playVideo" }}: {{ $title }}"
+    rel="noopener"
+  >
+    {{- with $thumbnail }}
+      <img src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}" alt="" loading="lazy" decoding="async">
+    {{- end }}
+    <span class="youtube-title">{{ $title }}</span>
+    <span class="youtube-play" aria-hidden="true"><svg><use href="{{ partialCached "svg-bundle" . }}#play"/></svg></span>
+  </a>
+
+  {{- with $caption }}
+    <figcaption>{{ . | markdownify }}</figcaption>
+  {{- end }}
+</figure>

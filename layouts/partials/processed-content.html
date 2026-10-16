@@ -73,6 +73,10 @@
 {{ end }}
 
 
+<!-- Videos (render hook): a <figure> isn't allowed inside a paragraph -->
+{{ $wrappedVideo := `<p>\s*(<figure class="video[^"]*">(?:.|\n)*?</figure>)\s*</p>` }}
+
+
 <!-- Remove extra tab indexes (see at the top) -->
 {{ $extraTabIndex := `(?:(<td class="lntd">(?:.|\n)+?<pre) tabindex="0" (class="chroma">))` }}
 
@@ -80,7 +84,7 @@
 
 
 <!--
-  This is doing 6 things right now (or is it):
+  This is doing 7 things right now (or is it):
   
   * Adding "tabindex=0" to native table and code fences;
   * Making tables scrollable;
@@ -88,7 +92,8 @@
   * Adding a "h2" to footnotes;
   * Changing the default inline style for default Chroma;
   * Removing the "extra" tabindexes in code fences 
-  with line numbers (.lntd > .chroma).
+  with line numbers (.lntd > .chroma);
+  * Unwrapping videos from paragraphs.
 -->
 
-{{ .Content | replaceRE $table $improvedTable | replaceRE $highlightCodeBlock $labeledHighlightCodeBlock | replaceRE $indentedCodeBlock $labeledIndentedCodeBlock | replaceRE $seeFootnotes $translatedSeeFootnotes | replaceRE $returnToText $translatedReturnToText | replaceRE $references $translatedReferences | replaceRE $footnoteReturnLink $improvedFootnoteReturnLink | replaceRE $highlightPadding $tweakedHighlightPadding | replaceRE $extraTabIndex $trimmedExtraTabIndex | safeHTML }}
+{{ .Content | replaceRE $table $improvedTable | replaceRE $highlightCodeBlock $labeledHighlightCodeBlock | replaceRE $indentedCodeBlock $labeledIndentedCodeBlock | replaceRE $seeFootnotes $translatedSeeFootnotes | replaceRE $returnToText $translatedReturnToText | replaceRE $references $translatedReferences | replaceRE $footnoteReturnLink $improvedFootnoteReturnLink | replaceRE $highlightPadding $tweakedHighlightPadding | replaceRE $extraTabIndex $trimmedExtraTabIndex | replaceRE $wrappedVideo "${1}" | safeHTML }}

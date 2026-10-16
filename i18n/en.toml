@@ -168,6 +168,9 @@ other = " and "
 
 # Misc
 
+[playVideo]
+other = "Play video"
+
 [missingCodec]
 other = "Your browser doesn't support HTML5 audio/video."
 

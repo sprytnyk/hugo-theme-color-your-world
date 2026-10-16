@@ -168,6 +168,9 @@ other = " und "
 
 # Misc
 
+[playVideo]
+other = "Video abspielen"
+
 [missingCodec]
 other = "Dein Browser unterstützt kein HTML5 Ton/Video."
 

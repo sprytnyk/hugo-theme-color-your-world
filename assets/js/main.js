@@ -261,6 +261,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
   updateAccent();
 
+
+  // YouTube: load the player only when it's asked for
+  document.addEventListener('click', function(event) {
+    const link = event.target.closest('.youtube-link[data-embed]');
+
+    if (!link || event.ctrlKey || event.metaKey || event.shiftKey) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const player = document.createElement('iframe');
+
+    player.src = link.dataset.embed;
+    player.title = link.dataset.title;
+    player.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+    player.referrerPolicy = 'strict-origin-when-cross-origin';
+    player.allowFullscreen = true;
+
+    link.replaceWith(player);
+    player.focus();
+  });
+
   // Smooth transition, only when changing modes (and not loading pages)
   function smoothTransition() {
     document.body.style.transition =

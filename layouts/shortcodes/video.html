@@ -1,0 +1,34 @@
+<!--
+  Usage:
+    video "clip.mp4"
+    video "clip.mp4" "A caption, *Markdown* allowed."
+    video src="clip.mp4" caption="..." poster="cover.jpg"
+    video src="clip.mp4" autoplay=true
+    video src="https://example.com/clip.mp4"
+
+  Files are looked up in the page bundle (also in "videoPath", "video" by
+  default). Files with the same name are picked up too:
+    clip.webm           Extra source
+    clip.jpg/png/webp   Poster
+    clip.vtt            Captions
+
+  "autoplay" plays the video muted and in loop, without controls (like a GIF).
+-->
+
+{{- $params := dict
+  "page" .Page
+  "src" (.Get "src" | default (.Get 0))
+  "caption" (.Get "caption" | default (.Get 1))
+  "poster" (.Get "poster")
+  "title" (.Get "title")
+  "class" (.Get "class")
+-}}
+
+{{- range $key := slice "autoplay" "loop" "muted" "controls" -}}
+  {{- $value := $.Get $key -}}
+  {{- if ne $value nil -}}
+    {{- $params = merge $params (dict $key (or (eq $value true) (eq $value "true"))) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- partial "video" $params -}}

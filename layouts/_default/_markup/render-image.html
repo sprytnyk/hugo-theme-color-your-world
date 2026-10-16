@@ -1,3 +1,13 @@
+<!-- Videos: ![Caption](clip.mp4 "Optional title") -->
+{{- $videoExtensions := slice ".mp4" ".webm" ".ogv" ".mov" ".m4v" -}}
+
+{{- if in $videoExtensions (lower (path.Ext (urls.Parse .Destination).Path)) -}}
+
+  <!-- Standalone videos are wrapped in a paragraph by default, which is undone in "processed-content" -->
+  {{- partial "video" (dict "page" .Page "src" .Destination "captionHTML" .Text "title" (.Title | default .PlainText)) -}}
+
+{{- else -}}
+
 {{ $file    := .Destination }}
 {{ $altText := .Text }}
 {{ $class   := .Page.Param "markupImgClass" }}
@@ -86,3 +96,5 @@
   {{ end }}
   
 {{ end }}
+
+{{- end -}}
