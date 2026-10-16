@@ -6,6 +6,15 @@ other = "Main menu."
 [changeAccent]
 other = "Change accent color."
 
+[accentColor]
+other = "Accent color"
+
+[customColor]
+other = "Custom color"
+
+[resetColor]
+other = "Reset to default"
+
 [changeMode]
 other = "Change to light/dark mode."
 

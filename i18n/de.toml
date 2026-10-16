@@ -6,6 +6,15 @@ other = "Hauptmenü"
 [changeAccent]
 other = "Aktzentfarbe wechseln."
 
+[accentColor]
+other = "Akzentfarbe"
+
+[customColor]
+other = "Eigene Farbe"
+
+[resetColor]
+other = "Zurücksetzen"
+
 [changeMode]
 other = "Zu hellem/dunklen Layout wechseln."
 

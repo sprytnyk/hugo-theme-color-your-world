@@ -6,6 +6,15 @@ other = "Головне меню."
 [changeAccent]
 other = "Змінити колір."
 
+[accentColor]
+other = "Колір акценту"
+
+[customColor]
+other = "Власний колір"
+
+[resetColor]
+other = "Скинути до типового"
+
 [changeMode]
 other = "Змінити світлий/темний режим."
 

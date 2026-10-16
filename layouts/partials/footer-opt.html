@@ -5,10 +5,40 @@
 {{ $defaultLightAccent  := .Site.Params.Style.lightAccent  | default .Site.Data.default.style.lightAccent }}
 {{ $defaultDarkAccent   := .Site.Params.Style.darkAccent   | default .Site.Data.default.style.darkAccent }}
 
-{{ $allAccentColors := union (slice $defaultLightAccent $defaultDarkAccent) .Site.Params.Style.presets }}
+<!-- Presets, without duplicates (the input type="color" only uses lowercase) -->
+{{ $accentColors := slice }}
+
+{{ range (slice $defaultDarkAccent $defaultLightAccent) | append .Site.Params.Style.presets }}
+  {{ $color := lower . }}
+  {{ if not (in $accentColors $color) }}
+    {{ $accentColors = $accentColors | append $color }}
+  {{ end }}
+{{ end }}
 
 <div class="req-js mode-picker">
-  <button class="outline-dashed" type="button" title="{{ T "changeMode" }}" aria-label="{{ T "changeMode" }}"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><use xlink:href="{{ $svgBundleLink }}#adjust"/></svg></button><input class="outline-dashed" type="color" list="presets" value="{{ if .Site.Params.Style.isDark }}{{ $defaultDarkAccent }}{{ else }}{{ $defaultLightAccent }}{{ end }}" title="{{ T "changeAccent" }}" aria-label="{{ T "changeAccent" }}"><datalist id="presets">{{ range $allAccentColors }}<option value="{{ . }}">{{ end }}</datalist>
+  <button class="mode-toggle" type="button" title="{{ T "changeMode" }}" aria-label="{{ T "changeMode" }}">
+    <svg class="icon-sun" aria-hidden="true"><use href="{{ $svgBundleLink }}#sun"/></svg>
+    <svg class="icon-moon" aria-hidden="true"><use href="{{ $svgBundleLink }}#moon"/></svg>
+  </button>
+
+  <div class="accent">
+    <button class="accent-toggle" type="button" title="{{ T "changeAccent" }}" aria-label="{{ T "changeAccent" }}" aria-expanded="false" aria-controls="accent-menu"><span></span></button>
+
+    <div class="accent-menu" id="accent-menu" role="group" aria-label="{{ T "accentColor" }}" hidden>
+      <p>{{ T "accentColor" }}</p>
+
+      <div class="swatches">
+        {{- range $accentColors -}}
+          <button class="swatch" type="button" data-color="{{ . }}" style="background-color: {{ . | safeCSS }}" title="{{ . }}" aria-label="{{ . }}" aria-pressed="false"></button>
+        {{- end -}}
+      </div>
+
+      <div class="accent-actions">
+        <label class="swatch custom" title="{{ T "customColor" }}"><input type="color" aria-label="{{ T "customColor" }}"></label>
+        <button class="accent-reset" type="button">{{ T "resetColor" }}</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- noscript notice -->

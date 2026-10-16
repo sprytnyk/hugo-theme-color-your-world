@@ -6,6 +6,15 @@ other = "Menu principal."
 [changeAccent]
 other = "Mudar cor de acentuação."
 
+[accentColor]
+other = "Cor de acentuação"
+
+[customColor]
+other = "Cor personalizada"
+
+[resetColor]
+other = "Repor a predefinição"
+
 [changeMode]
 other = "Mudar para o modo claro/escuro."
 

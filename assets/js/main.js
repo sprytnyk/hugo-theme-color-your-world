@@ -164,33 +164,102 @@ metaThemeColor.setAttribute('content', activeAccent);
 
 document.addEventListener('DOMContentLoaded', function() {
 
-  const colorPicker = document.querySelector('.mode-picker input');
-  
+  const picker = document.querySelector('.mode-picker');
+  const accentToggle = picker.querySelector('.accent-toggle');
+  const accentMenu = picker.querySelector('.accent-menu');
+  const customInput = accentMenu.querySelector('input[type=color]');
+  const swatches = accentMenu.querySelectorAll('.swatch[data-color]');
+
+  function accentKey() {
+    return rootElement.getAttribute('data-mode') === 'dark' ?
+      'darkAccent' : 'lightAccent';
+  }
+
+  // Apply the active accent color and mark it in the menu
   function updateAccent() {
     const activeAccent = getAccent();
 
     rootStyle.setProperty('--accent', activeAccent);
-    colorPicker.value = activeAccent;
     metaThemeColor.setAttribute('content', activeAccent);
+
+    const accent = activeAccent.toLowerCase();
+
+    swatches.forEach(function(swatch) {
+      swatch.setAttribute('aria-pressed', swatch.dataset.color === accent);
+    });
+
+    customInput.value = accent;
   }
 
-  colorPicker.onchange = function() {
-
-    const selectedAccent = colorPicker.value;
-
-    rootStyle.setProperty('--accent', selectedAccent);
-    
-    if (rootElement.getAttribute('data-mode') === 'dark') {
-      storage.set('darkAccent', selectedAccent);
-    } else {
-      storage.set('lightAccent', selectedAccent);
-    }
-    
+  function saveAccent(color) {
+    storage.set(accentKey(), color.toLowerCase());
     updateAccent();
   }
 
-  // Update the color picker with the active accent color
-  colorPicker.value = activeAccent;
+  function openMenu() {
+    accentMenu.hidden = false;
+    accentToggle.setAttribute('aria-expanded', 'true');
+
+    const selected = accentMenu.querySelector('[aria-pressed=true]');
+    (selected || swatches[0] || customInput).focus();
+  }
+
+  function closeMenu(returnFocus) {
+    if (accentMenu.hidden) {
+      return;
+    }
+
+    accentMenu.hidden = true;
+    accentToggle.setAttribute('aria-expanded', 'false');
+
+    if (returnFocus) {
+      accentToggle.focus();
+    }
+  }
+
+  accentToggle.addEventListener('click', function() {
+    if (accentMenu.hidden) {
+      openMenu();
+    } else {
+      closeMenu(false);
+    }
+  });
+
+  swatches.forEach(function(swatch) {
+    swatch.addEventListener('click', function() {
+      saveAccent(swatch.dataset.color);
+    });
+  });
+
+  // Live preview while picking, saved once the picker is closed
+  customInput.addEventListener('input', function() {
+    rootStyle.setProperty('--accent', customInput.value);
+  });
+
+  customInput.addEventListener('change', function() {
+    saveAccent(customInput.value);
+  });
+
+  accentMenu.querySelector('.accent-reset')
+    .addEventListener('click', function() {
+      storage.remove(accentKey());
+      updateAccent();
+    });
+
+  // Close with Escape or by clicking anywhere else
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+      closeMenu(picker.contains(document.activeElement));
+    }
+  });
+
+  document.addEventListener('pointerdown', function(event) {
+    if (!picker.contains(event.target)) {
+      closeMenu(false);
+    }
+  });
+
+  updateAccent();
 
   // Smooth transition, only when changing modes (and not loading pages)
   function smoothTransition() {
@@ -268,6 +337,6 @@ document.addEventListener('DOMContentLoaded', function() {
   {{ end }}
 
   // Mode change button listener
-  document.querySelector('.mode-picker button')
+  picker.querySelector('.mode-toggle')
     .addEventListener('click', localModeChange);
 });
