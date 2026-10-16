@@ -1,7 +1,7 @@
 <!--
   Anchor links for heading
   Level 2 to 6
-  
+
   TODO
   It looks weird when the heading is also a link,
   but then that's also true for links in ToCs
@@ -15,7 +15,7 @@
 {{ $anchoredLinkLevels := seq 2 6 }}
 
 {{ if in $anchoredLinkLevels .Level }}
-  <h{{ .Level }} id="{{ .Anchor | safeURL }}">{{ printf `<a class="anchor" href="#%s" title="%s: %s." aria-label="%s: %s."><svg aria-hidden="true"><use xlink:href="%s#hashtag"/></svg></a>` (.Anchor | safeURL) (T "anchorFor" | htmlEscape) (.Text | plainify | htmlUnescape | htmlEscape) (T "anchorFor" | htmlEscape) (.Text | plainify | htmlUnescape | htmlEscape) ($svgBundleLink) | safeHTML }} {{ .Text | safeHTML }}</h{{ .Level }}> 
+  <h{{ .Level }} id="{{ .Anchor | safeURL }}">{{ printf `<a class="anchor" href="#%s" title="%s: %s." aria-label="%s: %s."><svg aria-hidden="true"><use xlink:href="%s#hashtag"/></svg></a>` (.Anchor | safeURL) (T "anchorFor" | htmlEscape) (.Text | plainify | htmlUnescape | htmlEscape) (T "anchorFor" | htmlEscape) (.Text | plainify | htmlUnescape | htmlEscape) ($svgBundleLink) | safeHTML }} {{ .Text | safeHTML }}</h{{ .Level }}>
 {{ else }}
-  <h{{ .Level }} id="{{ .Anchor | safeURL }}">{{ .Text | safeHTML }}</h{{ .Level }}> 
+  <h{{ .Level }} id="{{ .Anchor | safeURL }}">{{ .Text | safeHTML }}</h{{ .Level }}>
 {{ end }}

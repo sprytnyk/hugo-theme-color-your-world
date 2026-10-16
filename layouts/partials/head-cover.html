@@ -53,26 +53,26 @@
       {{ $twitterImage = (.Fill (printf "%s %s" $imgProcConfig.twitterFillOptions $fallbackOptions)) }}
 
     {{ end }}
-    
+
     {{ if and (in .Site.Params.mainSections .Section) (not .Params.sitemapExclude) }}
       {{ $schemaCover = (slice ($twitterImage.Permalink) ($openGraphImage.Permalink)) }}
     {{ end }}
-    
+
   {{ end }}
-  
+
 {{ else }}
 
   {{ with $inputFile }}
-  
+
     {{ $openGraphImage = . }}
     {{ $twitterImage = $openGraphImage }}
-    
+
     {{ if and (in $.Site.Params.mainSections $.Section) (not $.Params.sitemapExclude) }}
       {{ $schemaCover = (slice $inputFile.Permalink) }}
     {{ end }}
-    
+
   {{ end }}
-  
+
 
 {{ end }}
 

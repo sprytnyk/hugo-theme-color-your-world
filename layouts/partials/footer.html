@@ -11,7 +11,7 @@
       {{ $currentParagraph := printf `<p>%s</p>` (. | markdownify | emojify) }}
       {{ $processedFooterText = $processedFooterText | append $currentParagraph }}
     {{ end }}
-    
+
     {{ delimit $processedFooterText "" | safeHTML }}
 
   {{ end }}

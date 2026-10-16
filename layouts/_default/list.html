@@ -1,5 +1,5 @@
 {{ define "main" }}
-  
+
   {{ $heading := (partial "basic-tags" .).heading }}
 
   <!-- Collect pages using the "search" layout -->
@@ -11,9 +11,9 @@
     {{ if and .Site.Params.Search.enable (gt (len $searchPages) 0) (eq .Kind "section") }}
       {{ partialCached "search-form" . .Layout }}
     {{ end }}
-    
+
     <h1>{{ $heading }}</h1>
-    
+
     {{ if eq .Kind "taxonomy" }}
       {{ if eq .Type "categories" }}
         {{ partialCached "categories" . }}
@@ -30,5 +30,5 @@
     {{ end }}
 
   </main>
-  
+
 {{ end }}

@@ -35,9 +35,9 @@
 {{ with partial "utilities/image-processing" (dict "context" . "input" $inputFile "resize" $resize "config" $imgProcConfig) }}
 
   {{ if .sets.default }}
-  
+
     <picture>
-    
+
       <!-- Extra sets -->
       {{ range .sets.extra }}
         <source
@@ -45,13 +45,13 @@
           type="{{ .mediaType }}"
         >
       {{ end }}
-      
+
       <!-- Default set -->
       <source
         srcset='{{ delimit .sets.default ", " }}'
         type="{{ .default.MediaType }}"
       >
-      
+
       <img
         {{ with $class }}class="{{ . }}"{{ end }}
         loading="lazy"
@@ -62,7 +62,7 @@
         {{ end }}
         {{ with $altText }}alt="{{ . }}"{{ end }}
       >
-      
+
     </picture>
 
   {{ else }}
@@ -82,7 +82,7 @@
         {{ with $altText }}alt="{{ . }}"{{ end }}
       >
     {{ else }}
-    
+
       <!-- If local file isn't found, assume it's a remote file -->
       {{ with ($destination | safeURL) }}
         <img
@@ -95,5 +95,5 @@
     {{ end }}
 
   {{ end }}
-  
+
 {{ end }}

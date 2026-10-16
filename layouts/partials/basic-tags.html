@@ -6,16 +6,16 @@
 
 <!-- If 404 page -->
 {{ if (eq .Kind "404") }}
-  
+
   {{ $currentHeading = (.Site.Params.notFound.title | default .Site.Data.default.notFound.title) | emojify }}
 
 <!-- If post list -->
 {{ else if (eq .Kind "section") }}
-  
+
   {{ if gt .Paginator.TotalPages 1 }}
     {{ $mainTitle = printf `%v, %v %v %v %v` .Title (T "page") .Paginator.PageNumber (T "of") .Paginator.TotalPages }}
   {{ end }}
-  
+
 <!-- If tags/categories list -->
 {{ else if eq .Kind "term" }}
 
@@ -26,9 +26,9 @@
   {{ else }}
     {{ $currentTerm = (T "category") }}
   {{ end }}
-  
+
   {{ $currentHeading = printf `%v: "%v"` $currentTerm .Title }}
-  
+
   {{ with .Paginator }}
     {{ if gt .TotalPages 1 }}
       {{ $mainTitle = printf `%v: "%v", %v %v %v %v` $currentTerm $.Title (T "page") .PageNumber (T "of") .TotalPages }}

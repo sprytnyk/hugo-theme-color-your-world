@@ -2,9 +2,9 @@
 
 <ul class="posts">
   {{ range $pag.Pages }}
-  
+
     {{ $pageDate := "" }}
-    
+
     {{ if not .Date.IsZero }}
       {{ $pageDate = .Date.Format "2006-01-02" }}
     {{ end }}

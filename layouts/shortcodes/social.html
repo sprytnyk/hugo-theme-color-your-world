@@ -2,32 +2,32 @@
 
   <!-- Get SVG bundle -->
   {{ $svgBundleLink := (partialCached "svg-bundle" .) }}
-  
+
   <!-- Reduce repetition... -->
   {{ $centralized   := $.Site.Params.Social.Centralized }}
   {{ $decentralized := $.Site.Params.Social.Decentralized }}
-  
-  
+
+
   <div class="social">
-  
+
     {{ range .Site.Data.social }}
-    
+
       {{ $currentEntry  := .entry }}
       {{ $currentLabel  := .label }}
       {{ $currentBase   := .base }}
       {{ $currentIcon   := .icon.id }}
-      
+
       {{ if not .decentralized }}
-      
+
         {{ with (index $centralized $currentEntry) }}
-        
+
           {{ $url   := $currentBase | replaceRE "<username>|<number>" (index . 0) }}
           {{ $label := $currentLabel }}
-          
+
           {{ with (index . 1) }}
             {{ $label = . }}
           {{ end }}
-          
+
           <a class="btn" href="{{ $url }}" rel="me nofollow" title="{{ $label }}">
             <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <use xlink:href="{{ $svgBundleLink }}#{{ $currentIcon }}"/>
@@ -51,9 +51,9 @@
               <p>{{ index . 1 | truncate 15 }}</p>
             </a>
           {{ end }}
-          
+
         {{ end }}
-        
+
       {{ end }}
 
     {{ end }}

@@ -21,7 +21,7 @@
 
   <nav aria-label="{{ T "ariaPagination" }}">
     <ul class="pagination">
-      
+
       <!-- First page. -->
       {{ if ne $pag.PageNumber 1 }}
       <li>
@@ -43,12 +43,12 @@
         </a>
       </li>
       {{ end }}
-    
+
       <!-- Page numbers. -->
       {{ range $pag.Pagers }}
-      
+
         {{ $pageNumberFlag := false }}
-        
+
         <!-- Advanced page numbers. -->
         {{ if gt $pag.TotalPages $maxLinks }}
 
@@ -74,14 +74,14 @@
 
           <!-- Middle pages. -->
           {{ else }}
-            
+
             {{ if and ( ge .PageNumber (sub $pag.PageNumber $adjacentLinks) ) ( le .PageNumber (add $pag.PageNumber $adjacentLinks) ) }}
               {{ $pageNumberFlag = true }}
             {{ end }}
 
           {{ end }}
 
-        
+
         <!-- Simple page numbers. -->
         {{ else }}
 

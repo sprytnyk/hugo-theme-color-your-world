@@ -3,28 +3,28 @@
   For some reason, Chrome will ignore some elements when using TAB
   (while Firefox will not). Since Chrome is used by the majority,
   I feel like I need to "fix" this.
-  
+
   For now, I'll be using "tabindex=0" (even if it makes Firefox
   complain about accessibility).
-  
+
   I'm also taking this as an opportunity to fix other minor details
   like i18n and responsiveness.
-  
+
   ~~Hopefully, most of the mess below can be removed in the future
   as Hugo evolves and more render hooks are implemented. (I remember
   about adding anchor links to headings with replaceRE before
   render hooks were available.)~~
-  
+
   I digress.
-  
+
   NOTE
   A while ago I had to update this hack, cuz Hugo 0.86.0 has
   "tabindex=0" as default. It should still be compatible with
   0.73.0 and above.
-  
+
   Reference:
   https://github.com/gohugoio/hugo/pull/8568
-  
+
   So... this is now a hack to a hack.
 -->
 
@@ -85,13 +85,13 @@
 
 <!--
   This is doing 7 things right now (or is it):
-  
+
   * Adding "tabindex=0" to native table and code fences;
   * Making tables scrollable;
   * Localizing some text;
   * Adding a "h2" to footnotes;
   * Changing the default inline style for default Chroma;
-  * Removing the "extra" tabindexes in code fences 
+  * Removing the "extra" tabindexes in code fences
   with line numbers (.lntd > .chroma);
   * Unwrapping videos from paragraphs.
 -->

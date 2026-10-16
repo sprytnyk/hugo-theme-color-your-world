@@ -22,16 +22,16 @@
 
   {{ $copyTexJS := resources.Get (printf "libs/katex@%s/dist/contrib/copy-tex.js" $katexVersion) | minify | fingerprint }}
   <script defer src="{{ $copyTexJS.RelPermalink }}" integrity="{{ $copyTexJS.Data.Integrity }}" crossorigin="anonymous"></script>
-  
+
 {{ end }}
 
 
 <!--
   auto-render extension + auto-render options + tabindex HACK (see below)
-  
+
   Chrome will ignore "scroll" elements while navigating
   via keyboard (while Firefox will not)
-  
+
   The workaround used here is to inject "tabindex=0" after
   the auto-render extension work is done
 -->

@@ -3,7 +3,7 @@
   <main>
     <article {{ if not (or .Params.sitemapExclude .Params.noindex) }}data-pagefind-body{{ end }}>
       <header>
-        
+
         <h1>{{ .Title | emojify }}</h1>
 
         {{ if or .Params.categories .Params.tags }}
@@ -18,7 +18,7 @@
             </ul>
           </div>
         {{- end -}}
-        
+
         {{ if not .Date.IsZero }}
           <p>
             {{ if .Date.Equal .Lastmod }}
@@ -28,13 +28,13 @@
             {{ end }}
           </p>
         {{ end }}
-        
+
         {{ if .Params.cover }}
           {{ partial "cover" . }}
         {{ end }}
-        
+
       </header>
-    
+
       {{ partial "table-of-contents" . }}
       {{ partial "processed-content" . }}
 

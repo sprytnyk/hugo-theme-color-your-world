@@ -19,12 +19,12 @@ div.s_video_simple {
 
   a {
     border: 1px solid var(--fg);
-    
+
     display: block;
     margin: 6px;
-    
+
     line-height: 0;
-    
+
     &:hover {
       opacity: .75;
     }
@@ -33,12 +33,12 @@ div.s_video_simple {
 
 section.youtube {
   border: 1px solid var(--fg);
-  
+
   margin: 2rem 0;
   padding-bottom: 56.25%;
   position: relative;
   overflow: hidden;
-  
+
   height: 0;
 }
 

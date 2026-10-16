@@ -49,7 +49,7 @@ function setLight() {
 /*
  * Initialization triggers dark/light mode based on 3 things
  * The priority follows:
- * 
+ *
  * 1. Local preference (localStorage)
  * 2. System settings (prefers-color-scheme)
  * 3. HTML data-* attribute (data-mode)
@@ -95,27 +95,27 @@ if (localMode === 'dark') {
     console.log(currentModeTitle +
     ' mode loaded via HTML data-* attribute (data-mode).');
   }
-  
+
 {{ end }}
 
 
 function getAccent() {
-  
+
   const currentMode = rootElement.getAttribute('data-mode');
-  
+
   const localDarkAccent = storage.get('darkAccent');
   const localLightAccent = storage.get('lightAccent');
-  
+
   let currentAccent;
 
   if (currentMode === 'dark') {
-  
+
     if (localDarkAccent === null) {
       currentAccent = '{{ $defaultDarkAccent }}';
     } else {
       currentAccent = localDarkAccent;
     }
-    
+
   } else {
 
     if (localLightAccent === null) {
@@ -123,11 +123,11 @@ function getAccent() {
     } else {
       currentAccent = localLightAccent;
     }
-    
+
   }
-  
+
   {{ if hugo.IsDevelopment }}
-  
+
     if (
       (currentMode === 'dark') &&
       (storage.get('darkAccent') !== null) ||
@@ -140,9 +140,9 @@ function getAccent() {
       console.log('Custom accent color NOT defined. Loading default ' +
       currentMode + ' accent (' + currentAccent + ').');
     }
-    
+
   {{ end }}
-  
+
   return currentAccent;
 }
 
@@ -289,10 +289,10 @@ document.addEventListener('DOMContentLoaded', function() {
     document.body.style.transition =
     '{{ printf "background-color %[1]s, color %[1]s" $changeTransition }}';
   }
-  
+
   // Change mode via localStorage
   function localModeChange() {
-  
+
     smoothTransition();
 
     if (rootElement.getAttribute('data-mode') === 'light') {
@@ -302,18 +302,18 @@ document.addEventListener('DOMContentLoaded', function() {
       setLight();
       storage.set('mode', 'light');
     }
-    
+
     {{ if hugo.IsDevelopment }}
       console.log('Local: ' +
       capitalize(storage.get('mode') + ' mode set.'));
     {{ end }}
-    
+
     updateAccent();
   }
 
-  
+
   {{ if hugo.IsDevelopment }}
-  
+
     // TEST
     // Keyboard shortcut for mode change, here for testing purposes only
     // CTRL + ALT + M
@@ -324,30 +324,30 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
       }
     }, false);
-    
+
   {{ end }}
 
 
   {{ if not .Site.Params.Style.ignoreSystemSettings }}
-  
+
     // Change mode via system settings
     function systemModeChange() {
-    
+
       smoothTransition();
-      
+
       if (prefersDark.matches) {
         setDark();
       } else {
         setLight();
       }
-      
+
       {{ if hugo.IsDevelopment }}
         console.log('System: ' +
         capitalize(rootElement.getAttribute('data-mode')) + ' mode set.');
       {{ end }}
-      
+
       updateAccent();
-      
+
       // System settings do not require localStorage
       // (the stored mode may have been set after the page loaded)
       storage.remove('mode');
@@ -356,7 +356,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // System settings listener
     prefersDark.addEventListener('change', systemModeChange);
-  
+
   {{ end }}
 
   // Mode change button listener

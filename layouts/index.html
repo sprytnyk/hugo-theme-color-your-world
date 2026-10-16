@@ -6,28 +6,28 @@
 
     {{ if .Content }}
       <article>
-      
+
         <header>
-        
+
           <h1>{{ .Title | emojify }}</h1>
-          
+
           {{ if .Params.cover }}
             {{ partial "cover" . }}
           {{ end }}
-          
+
         </header>
-        
+
         {{ partial "table-of-contents" . }}
         {{ partial "processed-content" . }}
-        
+
       </article>
     {{ else }}
-    
+
       <h1>{{ .Title | emojify | default (T "posts") }}</h1>
-      
+
       {{ partial "post-list" . }}
       {{ partial "pagination" . }}
-      
+
     {{ end }}
 
   </main>
