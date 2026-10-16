@@ -13,7 +13,7 @@
 {{ with $basicTags.description }}<meta name="description" content="{{ . }}">{{ end }}
 
 
-<meta name="robots" content="{{ if and (ne .Kind "404") (ne .Params.noindex true) }}index follow{{ else }}noindex follow{{ end }}">
+<meta name="robots" content="{{ if and (ne .Kind "404") (ne .Params.noindex true) }}index, follow{{ else }}noindex, follow{{ end }}">
 
 
 <!-- Canon -->
@@ -106,7 +106,14 @@
   <meta property="og:locale" content="{{ . }}">
 {{ end }}
 
-{{ if .Site.Config.Privacy.Twitter.EnableDNT }}
+{{ $twitterDNT := false }}
+{{ if ge hugo.Version "0.141.0" }}
+  {{ $twitterDNT = .Site.Config.Privacy.X.EnableDNT }}
+{{ else }}
+  {{ $twitterDNT = .Site.Config.Privacy.Twitter.EnableDNT }}
+{{ end }}
+
+{{ if $twitterDNT }}
   <meta name="twitter:dnt" content="on">
 {{ end }}
 
@@ -200,9 +207,9 @@
       },
       "author": {
         "@type": "Person",
-        "name": "{{ .Site.Params.author }}",
         {{ with .Site.Params.authorDesc }}"description": {{ . }},{{ end }}
-        {{ if gt (len $sameAs) 0 }}"sameAs": {{ $sameAs }}{{ end }}
+        {{ if gt (len $sameAs) 0 }}"sameAs": {{ $sameAs }},{{ end }}
+        "name": "{{ .Site.Params.author }}"
       }
     }
   </script>
@@ -246,4 +253,4 @@
 <!-- Main JS -->
 {{ $mainJS := resources.Get "js/main.js" | resources.ExecuteAsTemplate "js/main.js" . | js.Build (dict "minify" "true") | fingerprint }}
 
-<script src="{{ $mainJS.Permalink }}" integrity="{{ $mainJS.Data.Integrity }}" crossorigin="anonymous"></script>
+<script src="{{ $mainJS.RelPermalink }}" integrity="{{ $mainJS.Data.Integrity }}" crossorigin="anonymous"></script>

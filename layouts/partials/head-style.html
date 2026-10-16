@@ -1,6 +1,6 @@
 <!-- Main CSS -->
-{{ $main := resources.Get "scss/main.scss" | resources.ExecuteAsTemplate "css/main.scss" . | toCSS | minify | fingerprint }}
-<link rel="stylesheet" href="{{ $main.Permalink }}" integrity="{{ $main.Data.Integrity }}" crossorigin="anonymous">
+{{ $main := resources.Get "scss/main.scss" | resources.ExecuteAsTemplate "css/main.scss" . | css.Sass | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $main.RelPermalink }}" integrity="{{ $main.Data.Integrity }}" crossorigin="anonymous">
 
 
 <!-- If JS is disabled -->
@@ -22,7 +22,7 @@
     <meta name="theme-color" content="{{ $lightAccent }}" media="(prefers-color-scheme: light)">
   {{ end }}
 
-  {{ $noscript := resources.Get "scss/noscript.scss" | resources.ExecuteAsTemplate "css/noscript.scss" . | toCSS | minify | fingerprint }}
-  <link rel="stylesheet" href="{{ $noscript.Permalink }}" integrity="{{ $noscript.Data.Integrity }}" crossorigin="anonymous">
+  {{ $noscript := resources.Get "scss/noscript.scss" | resources.ExecuteAsTemplate "css/noscript.scss" . | css.Sass | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $noscript.RelPermalink }}" integrity="{{ $noscript.Data.Integrity }}" crossorigin="anonymous">
 
 </noscript>

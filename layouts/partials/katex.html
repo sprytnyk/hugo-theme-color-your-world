@@ -2,17 +2,17 @@
 {{ $katexVersion := .Site.Data.default.libs.katex }}
 
 {{ $katexCSS := resources.Get (printf "libs/katex@%s/dist/katex.css" $katexVersion) | minify | fingerprint }}
-<link rel="stylesheet" href="{{ $katexCSS.Permalink }}" integrity="{{ $katexCSS.Data.Integrity }}" crossorigin="anonymous">
+<link rel="stylesheet" href="{{ $katexCSS.RelPermalink }}" integrity="{{ $katexCSS.Data.Integrity }}" crossorigin="anonymous">
 
 {{ $katexJS := resources.Get (printf "libs/katex@%s/dist/katex.js" $katexVersion) | minify | fingerprint }}
-<script defer src="{{ $katexJS.Permalink }}" integrity="{{ $katexJS.Data.Integrity }}" crossorigin="anonymous"></script>
+<script defer src="{{ $katexJS.RelPermalink }}" integrity="{{ $katexJS.Data.Integrity }}" crossorigin="anonymous"></script>
 
 
 <!-- mhchem extension -->
 {{ if or (in .Params.katexExtensions "mhchem") (in .Site.Params.katexExtensions "mhchem") }}
 
   {{ $mhchem := resources.Get (printf "libs/katex@%s/dist/contrib/mhchem.js" $katexVersion) | minify | fingerprint }}
-  <script defer src="{{ $mhchem.Permalink }}" integrity="{{ $mhchem.Data.Integrity }}" crossorigin="anonymous"></script>
+  <script defer src="{{ $mhchem.RelPermalink }}" integrity="{{ $mhchem.Data.Integrity }}" crossorigin="anonymous"></script>
 
 {{ end }}
 
@@ -21,7 +21,7 @@
 {{ if or (in .Params.katexExtensions "copy-tex") (in .Site.Params.katexExtensions "copy-tex") }}
 
   {{ $copyTexJS := resources.Get (printf "libs/katex@%s/dist/contrib/copy-tex.js" $katexVersion) | minify | fingerprint }}
-  <script defer src="{{ $copyTexJS.Permalink }}" integrity="{{ $copyTexJS.Data.Integrity }}" crossorigin="anonymous"></script>
+  <script defer src="{{ $copyTexJS.RelPermalink }}" integrity="{{ $copyTexJS.Data.Integrity }}" crossorigin="anonymous"></script>
   
 {{ end }}
 
@@ -40,4 +40,4 @@
 {{ $katexPostRender := resources.Get "js/katex-post-render.js" | resources.ExecuteAsTemplate "js/katex-post-render.js" . }}
 
 {{ $katexCustomRender := slice $autoRender $katexAutoRenderOptions $katexPostRender | resources.Concat "js/katex-custom-render.js" | fingerprint }}
-<script defer src="{{ $katexCustomRender.Permalink }}" integrity="{{ $katexCustomRender.Data.Integrity }}" crossorigin="anonymous"></script>
+<script defer src="{{ $katexCustomRender.RelPermalink }}" integrity="{{ $katexCustomRender.Data.Integrity }}" crossorigin="anonymous"></script>
