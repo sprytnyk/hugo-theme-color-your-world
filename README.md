@@ -544,6 +544,15 @@ Sites made for the original theme work as they are, apart from these changes:
 * If you override `assets/scss/colors/variables.scss` or the font files, start again from the new files, as the variables changed.
 * The color picker is now a menu with your presets, instead of the browser's color input.
 * The `youtube` shortcode is replaced (same params as Hugo's, plus `caption`).
+* **Translation-only page bundles** (only `index.uk.md`, say) lose their images on Hugo 0.123 and newer: files without a language code, like `img/photo.jpg`, now belong to the default language only. Add an `index.md` to the bundle that is never rendered, so the files are found again:
+
+  ```yaml
+  ---
+  build:
+    render: never
+    list: never
+  ---
+  ```
 
 The fixes and features from this fork are in the [commit history](https://github.com/sprytnyk/hugo-theme-color-your-world/commits/master).
 
