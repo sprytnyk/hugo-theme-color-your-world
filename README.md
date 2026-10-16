@@ -1,436 +1,565 @@
 # Color Your World
 
-[![Hugo](https://img.shields.io/badge/Hugo-%5E0.128.0-ff4088?logo=hugo)](https://gohugo.io/)
-[![License](https://badgen.net/badge/license/MIT/blue)](https://gitlab.com/rmaguiar/hugo-theme-color-your-world/-/blob/master/LICENSE)
-[![Hugo Themes](https://badgen.net/badge/Hugo%20Themes/Color%20Your%20World?color=1dbc91)](https://themes.gohugo.io/hugo-theme-color-your-world/)
-[![Buy Me a Coffee](https://badgen.net/badge/icon/buy%20me%20a%20coffee?icon=kofi&label&color=ff5e5b)](https://ko-fi.com/rmaguiar)
+[![Hugo](https://img.shields.io/badge/Hugo%20Extended-%E2%89%A50.141.0-ff4088?logo=hugo)](https://gohugo.io/)
+[![License](https://badgen.net/badge/license/MIT/blue)](LICENSE)
 
-* [Live demo (on Netlify)](https://color-your-world-demo.netlify.app)
-* [Demo repo](https://gitlab.com/rmaguiar/hugo-theme-color-your-world-demo/)
+A minimal, privacy-aware [Hugo](https://gohugo.io/) theme for personal sites and technical blogs: slate dark and light modes, content on rounded cards, and an accent color your visitors can pick themselves.
 
-**Color Your World** is a [Hugo](https://gohugo.io/) theme developed around a single experiment that led me to this:
+This is a fork of [Color Your World](https://gitlab.com/rmaguiar/hugo-theme-color-your-world) by Raphael Aguiar, with a new design, bug fixes and video support. See [Upgrading from the original theme](#upgrading-from-the-original-theme) if you're switching.
 
-![HTML color picker with 12 presets.](https://gitlab.com/rmaguiar/hugo-theme-color-your-world/-/raw/master/images/color-picker.png)
+![Dark mode.](images/screenshot.png)
 
-It's a HTML color picker. Along with some vanilla JS, it allows anyone to change what I'll be calling here... the **accent color**, a color used mostly in interactive elements.
+![Light mode.](images/screenshot2.png)
 
-I liked the result so much that I decided to use it on my main site, but I also want to share it, in case anyone wants to tinker with it.
+## Contents
 
-It makes heavy use of [Hugo Pipes](https://gohugo.io/hugo-pipes) and I highly recommend using `--minify` when building!
+* [Features](#features)
+* [Requirements](#requirements)
+* [Installation](#installation)
+* [Quick start](#quick-start)
+* [Appearance](#appearance)
+* [Writing content](#writing-content)
+* [Search](#search)
+* [Shortcodes](#shortcodes)
+* [Customization](#customization)
+* [Configuration reference](#configuration-reference)
+* [Upgrading from the original theme](#upgrading-from-the-original-theme)
+* [Development](#development)
+* [Credits](#credits)
 
-I've been working on this theme for so long that there are features I don't even remember anymore... But here are *some*:
+## Features
 
-* Customizable dark/light mode;
-* Customizable "accent color" (in an user-level);
-* Keyboard-friendly;
-* Privacy-aware to an extent (no Google Analytics/Fonts, Disqus, etc);
-* Social shortcode including centralized and decentralized platforms;
-* Contact form shortcode (via [Formspree](https://formspree.io/));
-* Open Graph, Twitter Cards and structured data (Schema.org) meta tags;
-* Responsive images via image processing;
-* Basic search functionality via [Pagefind](https://pagefind.app/);
-* Image lazy loading;
-* **noscript** capable to an extent (except for KaTeX and search functionality).
-
-
-## Screenshots
-
-![Theme screenshot in dark mode.](https://gitlab.com/rmaguiar/hugo-theme-color-your-world/-/raw/master/images/screenshot.png)
-
-![Theme screenshot in light mode.](https://gitlab.com/rmaguiar/hugo-theme-color-your-world/-/raw/master/images/screenshot2.png)
+* Dark and light modes, following the system setting or a site default, switchable by visitors;
+* An accent color picker with your own presets (plus any custom color), remembered per mode;
+* System fonts, so no web fonts are downloaded;
+* Wide content column, so ~90 columns of code fit without scrolling on desktop;
+* Syntax highlighting with high contrast (WCAG AA) Monokai and Solarized styles;
+* Videos attached to posts, with Markdown or a shortcode;
+* YouTube embeds that load nothing from YouTube until the visitor presses play;
+* Search via [Pagefind](https://pagefind.app/);
+* Responsive images (resized and converted to WebP at build time) and lazy loading;
+* Math via [KaTeX](https://katex.org/);
+* Social links (centralized and decentralized platforms) and a contact form (via [Formspree](https://formspree.io/));
+* Open Graph, Twitter Cards and Schema.org meta tags, plus `rel="me"` links;
+* Multilingual, with English, German, Portuguese and Ukrainian translations;
+* Keyboard friendly, and works without JavaScript (except for search, KaTeX and the color picker);
+* Privacy-aware: no Google Analytics, Google Fonts, Disqus, etc.
 
 ## Requirements
 
-* Hugo Extended
-* Minimum version: 0.128.0
+* Hugo **Extended**, version **0.141.0** or newer (tested with 0.152.2);
+* Optional: [Pagefind](https://pagefind.app/) for search.
 
 ## Installation
 
-If you have git installed, you can do the following at the CLI within the Hugo directory:
+As a Git submodule, from your site's folder:
 
 ```bash
-git clone https://gitlab.com/rmaguiar/hugo-theme-color-your-world.git themes/color-your-world
+git submodule add https://github.com/sprytnyk/hugo-theme-color-your-world.git themes/color-your-world
 ```
 
-For more information read the [Hugo official setup guide](https://gohugo.io/overview/installing/).
+Or as a plain clone:
 
-## Customization
+```bash
+git clone https://github.com/sprytnyk/hugo-theme-color-your-world.git themes/color-your-world
+```
 
-### Dark/light mode colors
+Then set `theme = "color-your-world"` in your site config.
 
-Both color palettes can be found in `assets/scss/colors/variables.scss`.
+## Quick start
 
-### Accent color
+A minimal `hugo.toml`:
 
-By default, there are 2 accent colors plus 10 on the demo site, distributed into pairs.
+```toml
+baseURL = "https://example.org/"
+languageCode = "en"
+title = "Jane Doe"
+theme = "color-your-world"
 
-You can change the default mode and accent colors in the config:
+[pagination]
+  pagerSize = 10
+
+# Required for the theme's syntax highlighting styles
+[markup.highlight]
+  noClasses = false
+
+[menus]
+  [[menus.main]]
+    name = "About"
+    url = "/"
+    weight = 1
+  [[menus.main]]
+    name = "Posts"
+    url = "posts/"
+    weight = 2
+
+[params]
+  description = "Jane Doe's personal website"
+  author = "Jane Doe"
+  footerText = [ "Built with [Hugo](https://gohugo.io)." ]
+
+  [params.style]
+    isDark = true
+```
+
+Posts go in `content/posts/` (or whatever is set as `mainSections`). The home page lists them, unless `content/_index.md` has content of its own, in which case it shows that instead (handy for an "About me" home page).
+
+Build with `--minify` for the smallest output:
+
+```bash
+hugo --minify
+```
+
+## Appearance
+
+### Dark and light modes
 
 ```toml
 [params.style]
-
-  # Dark mode as default
-  # User preferences (site/system settings) will still have priority over it
-  # The default is false
+  # Use dark mode by default (the default is false)
   isDark = true
 
-  # Accent colors for dark and light mode respectively
-  darkAccent   = "#1dbc91" # Default is "#1dbc91"
-  lightAccent  = "#1f676b" # Default is "#1f676b"
-
-  # More colors, pick as many as you want (not really sure if there's a limit)
-  # Apparently these may not show up on every modern browser (ie.: Firefox)
-  # There's no default value. Used here just as example
-  presets = [ "#1f676b", "#f3a530", "#902b37", "#1dbc91", "#754e85", "#7fc121", "#a8314a", "#ff7433", "#3e6728", "#c063bd" ]
+  # Ignore the system setting (prefers-color-scheme) and always start
+  # with the default mode above (the default is false)
+  ignoreSystemSettings = false
 ```
+
+The mode is picked in this order: the visitor's choice (button in the footer), then the system setting, then `isDark`.
+
+Both palettes are in `assets/scss/colors/variables.scss`, based on [Tailwind's](https://tailwindcss.com/docs/colors) *slate* colors. To change them, copy that file to the same path in your site and edit it.
+
+### Accent color
+
+The accent color is used for links, buttons, tags and highlights. Visitors can change it from the footer:
+
+![Accent color menu.](images/color-picker.png)
+
+```toml
+[params.style]
+  # Default accent for each mode
+  darkAccent  = "#60a5fa" # Default is "#60a5fa"
+  lightAccent = "#2563eb" # Default is "#2563eb"
+
+  # Colors offered in the menu, after the two defaults
+  # Any other color can still be picked with the rainbow swatch
+  presets = [ "#34d399", "#059669", "#a78bfa", "#7c3aed", "#f472b6", "#db2777", "#fbbf24", "#d97706", "#fb7185", "#e11d48" ]
+```
+
+Use 6-digit hex colors (`#rrggbb`). The choice is saved in the visitor's browser, separately for each mode.
 
 ### Fonts
 
-By default, this theme uses *Oswald* and *Open Sans* fonts. Latin charset only and `woff2` format, which is supported by most modern browsers.
+The theme uses the system font stack (`system-ui` and friends), so no font files are downloaded.
 
-If that's not enough for your use case, you'll have to generate a new set yourself.
+To self-host fonts instead:
 
-Fortunately, it's fairly easy thanks to this tool: [google-webfonts-helper](https://gwfh.mranftl.com/fonts).
-
-In your project folder, add the font files to a folder named `/assets/fonts` and the CSS content to a file named `/assets/scss/fonts/font-face.scss`.
-
-Also make sure to copy the file `/assets/scss/fonts/variables.scss` into your project folder and change the font names accordingly.
+1. Put the font files in your site's `assets/fonts/` (they will be preloaded). [google-webfonts-helper](https://gwfh.mranftl.com/fonts) can generate them.
+2. Put the `@font-face` rules in `assets/scss/fonts/font-face.scss`.
+3. Copy `assets/scss/fonts/variables.scss` from the theme and change the font names.
 
 ### Syntax highlighting
 
-This theme comes with two chroma styles, meant to be used with dark and light mode respectively. These are **Monokai** for dark mode and **Solarized Dark** for light mode.
+![Syntax highlighting in dark and light modes.](images/syntax-highlight.png)
 
-![Syntax highlighting in both dark and light modes.](https://gitlab.com/rmaguiar/hugo-theme-color-your-world/-/raw/master/images/syntax-highlight.gif)
+Code uses Monokai in dark mode and Solarized Dark in light mode, both on a slate background, based on the [pygments-high-contrast-stylesheets](https://github.com/mpchadwick/pygments-high-contrast-stylesheets) (WCAG AA passing). Tabs are 4 columns wide.
 
-It's worth noting that I'm not using the original stylesheets, but modified stylesheets based on the [pygments-high-contrast-stylesheets](https://github.com/mpchadwick/pygments-high-contrast-stylesheets) (aka "WCAG AA passing Pygments stylesheets").
+It needs `noClasses = false` under `[markup.highlight]` in your config. The styles are in `assets/scss/colors/chroma/`, as `dark.scss` and `light.scss`.
 
-In case you want to change it, it can be found in `assets/scss/colors/chroma` as `dark.scss` and `light.scss`.
-
-The lines below are **required** in your config file to make use of this feature:
+To use Hugo's own inline styles instead, leave `noClasses` out and set:
 
 ```toml
-[markup.highlight]
-  noClasses = false
+[params.style]
+  useCustomChroma = false
 ```
 
-To disable it, you can just remove the `noClasses = false` (as its default value is `true`) and add the lines below:
+## Writing content
 
-```toml
-[params]
-  [params.style]
-    useCustomChroma = false
+### Front matter
+
+Besides Hugo's own (`title`, `date`, `lastmod`, `tags`, `categories`, `draft`, ...):
+
+| Param | Description |
+|---|---|
+| `description` | Used in meta tags and the RSS feed. |
+| `cover`, `coverAlt` | Cover image (page resource) shown under the title, and used for Open Graph, Twitter Cards and Schema.org. |
+| `toc` | `true` shows a table of contents. |
+| `katex` or `math` | `true` loads KaTeX on the page. |
+| `katexExtensions` | KaTeX extensions to load: `[ mhchem, copy-tex ]`. |
+| `mainTitle` | Replaces the `<title>` tag, if it should differ from the `<h1>`. |
+| `disableTitleSeparator` | `true` leaves the site title out of the `<title>` tag. |
+| `sitemapExclude` | `true` leaves the page out of the sitemap and search. |
+| `noindex` | `true` asks search engines not to index the page, and leaves it out of search. |
+| `imgPath`, `videoPath` | Folder of the page bundle to look for images and videos in. |
+| `markupImgClass` | Class for Markdown images: `border` or `borderless`. |
+
+The `archetypes` folder has templates for posts (`default`), the home page (`home`), math posts (`katex`), standalone pages (`page`) and the search page (`search`):
+
+```bash
+hugo new --kind katex posts/my-post.md
 ```
 
-## Image processing
+### Images
 
-By default, images are responsive. This is achieved through image processing, where images are resized depending on their width.
+Images are responsive: images in the page bundle are resized to 1280, 960 and 640 pixels wide (when they're bigger than that), with a WebP version of each, and lazy loaded. That applies to Markdown images and the `img` and `figure` shortcodes.
 
-For example, images with width equal or greater than 1280 pixels are processed (resized) into 3 sizes: `1280x`, `960x` and `640x`.
+Cover images are also cropped for Open Graph (1200×630) and Twitter Cards (1280×640).
 
-If using Hugo v0.83 or above, a set of WEBP files will be generated as well.
+In dark mode, images are slightly dimmed (except SVG).
 
-Cover images will *also* be resized (using the [Fill](https://gohugo.io/content-management/image-processing/#fill) method) for Open Graph (`1200x630`) and Twitter Cards (`1280x640`).
+See [Image processing](#image-processing) to change the sizes.
 
-You can change this behavior via config. Below you can find the default params:
+### Videos
 
-```toml
-[imageProcessing]
+Attach a video to a post (page bundle) and add it with plain Markdown, on its own line:
 
-  # Enable auto resize
-  # Includes "img" and "figure" shortcodes
-  autoResize = true
-  
-  # Convert "tiff" files to the format below
-  # since the most used browsers don't support it
-  fallbackOptions = "jpeg"
-  
-  # Fill options for Open Graph and Twitter card images
-  # These images are also used in the Schema.org structured data
-  openGraphFillOptions = "1200x630"
-  twitterFillOptions = "1280x640"
-  
-  # Extra formats (along JPEG/PNG)
-  [[imageProcessing.extraFormats]]
-    formatOptions = "webp"
-    mediaType = "image/webp"
-    minVersion = "0.83"
-  
-  # Sizes at which images are resized
-  # Keep the sizes in descending order
-  # The smallest size will be used as the default image
-  [[imageProcessing.sizes]]
-    resizeOptions = "1280x"
-    descriptor = "1280w"
-    minWidth = 1280
-  
-  [[imageProcessing.sizes]]
-    resizeOptions = "960x"
-    descriptor = "960w"
-    minWidth = 960
-  
-  [[imageProcessing.sizes]]
-    resizeOptions = "640x q90"
-    descriptor = "640w"
-    minWidth = 640
+```markdown
+![A caption, *Markdown* allowed.](clip.mp4)
 ```
 
-When using the shortcodes `img` and `figure`, image processing can also be disabled by setting the `resize` param as `false`.
+Files with the same name are picked up automatically:
+
+* `clip.webm` (or `.mp4`, `.ogv`, `.mov`, `.m4v`) as an extra format, smallest file first;
+* `clip.jpg` (or `.jpeg`, `.png`, `.webp`, `.avif`) as the poster;
+* `clip.vtt` as captions.
+
+For more options, see the [`video` shortcode](#video). For YouTube, see the [`youtube` shortcode](#youtube).
+
+### Math
+
+With `katex: true` (or `math: true`) in the front matter, or in `[params]` for the whole site, math is rendered with KaTeX. Use `$...$` or `\(...\)` inline, and `$$...$$` or `\[...\]` for blocks.
+
+Markdown may change characters inside expressions (like `_` or `\\`). Wrap them in the `katex` shortcode to keep them as they are:
+
+```markdown
+{{</* katex */>}}
+$$x_{1,2} = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$
+{{</* /katex */>}}
+```
+
+## Search
+
+Search runs in the browser with [Pagefind](https://pagefind.app/), which indexes the built site.
+
+1. Create the search page, `content/search.md`:
+
+   ```bash
+   hugo new --kind search search.md
+   ```
+
+2. Enable the search form (shown above the post list):
+
+   ```toml
+   [params.search]
+     enable = true
+   ```
+
+3. Build the site, then the index:
+
+   ```bash
+   hugo --minify
+   npx -y pagefind --site public
+   ```
+
+   To try it locally, serve the `public` folder (for example with `npx -y pagefind --site public --serve`), since `hugo server` doesn't run Pagefind.
+
+Only posts and pages are indexed, not lists. Pages with `sitemapExclude` or `noindex` are left out.
 
 ## Shortcodes
 
-The most complex shortcodes here are the `social` and `contact-form`. They can be used to inject a list of social platform links and a contact form, respectively.
+### Video
+
+```markdown
+{{</* video "clip.mp4" "A caption." */>}}
+{{</* video src="clip.mp4" poster="cover.jpg" caption="A caption." */>}}
+{{</* video src="clip.mp4" autoplay=true */>}}
+{{</* video src="https://example.com/clip.mp4" */>}}
+```
+
+| Param | Description |
+|---|---|
+| `src` (or 1st) | File in the page bundle (also looked up in `videoPath`, `video` by default), or a URL. |
+| `caption` (or 2nd) | Caption, Markdown allowed. |
+| `poster` | Poster image (page resource or URL). Defaults to an image with the video's name. |
+| `title` | Accessible name, defaults to the caption. |
+| `autoplay` | Plays muted, in loop and without controls, like a GIF. |
+| `loop`, `muted`, `controls` | Override the defaults (controls are on, unless `autoplay`). |
+| `class` | Extra classes for the `<figure>`. |
+
+### YouTube
+
+The theme replaces Hugo's built-in `youtube` shortcode with a lighter embed: the video's thumbnail and title with a play button. The player is only loaded when it's clicked, and without JavaScript it's a link to the video.
+
+```markdown
+{{</* youtube "dQw4w9WgXcQ" */>}}
+{{</* youtube id="dQw4w9WgXcQ" title="Custom title" start=30 end=90 caption="A caption." */>}}
+```
+
+| Param | Description |
+|---|---|
+| `id` (or 1st) | Video ID. |
+| `title` | Shown over the thumbnail. Defaults to the video's title on YouTube. |
+| `start`, `end` | Start and end time, in seconds. |
+| `caption` | Caption, Markdown allowed. |
+| `class` | Extra classes for the `<figure>`. |
+
+The thumbnail and title are downloaded **when the site is built** (and cached by Hugo), and served from your site. Visitors don't connect to YouTube until they press play. If they can't be downloaded, the build still works, with a placeholder instead.
+
+It follows Hugo's `privacy.youtube` config:
+
+```toml
+[privacy.youtube]
+  # Play from youtube-nocookie.com
+  privacyEnhanced = true
+  # Only render the link
+  disable = false
+```
 
 ### Social
 
-Here I make a distinction between centralized and decentralized platforms.
+Links to your profiles, as a grid of cards. The same profiles are used for the `rel="me"` links and Schema.org data.
 
-Since decentralized platforms introduced the concept of "instances". It's not uncommon that a single person owns multiple accounts, in multiple instances, in the same platform.
+```markdown
+{{</* social */>}}
+```
 
-This distinction should make the setup easier.
-
-Here's an example of config file:
+Centralized platforms take a username, and an optional label. Decentralized ones (with instances) take a full URL and a label, and can have several accounts:
 
 ```toml
 [params.social.centralized]
-  facebook      = [ "<username>", "Zuckerburg" ]
-  flickr        = [ "<username>" ]
   github        = [ "<username>" ]
   gitlab        = [ "<username>" ]
-  instagram     = [ "<username>" ]
-  keybase       = [ "<username>" ]
   linkedin      = [ "<username>" ]
-  medium        = [ "<username>" ]
-  reddit        = [ "<username>" ]
-  snapchat      = [ "<username>" ]
-  soundcloud    = [ "<username>" ]
-  stackOverflow = [ "<username>" ]
-  strava        = [ "<username>" ]
-  telegram      = [ "<username>" ]
-  twitch        = [ "<username>" ]
-  vimeo         = [ "<username>" ]
-  whatsapp      = [ "<number>" ]
   x             = [ "<username>", "@birb" ]
-  xing          = [ "<username>" ]
-  youtube       = [ "<username>" ]
-  #entry         = [ "username", "label (optional)" ]
-  
-  # The "entry" here IS important. It's used to load the data.
+  # Also: facebook, flickr, instagram, keybase, medium, reddit, snapchat,
+  # soundcloud, stackOverflow, strava, telegram, twitch, vimeo,
+  # whatsapp (<number>), xing, youtube
+  # The key matters: it's used to find the platform in data/social.json
 
 [params.social.decentralized]
-
+  [params.social.decentralized.mastodon]
+    1 = [ "https://mastodon.social/@<username>", "mastodon.social" ]
+    2 = [ "https://fosstodon.org/@<username>", "fosstodon.org" ]
   [params.social.decentralized.bsky]
     1 = [ "https://bsky.app/profile/<username>.bsky.social", "bsky.social" ]
-    #entry = [ "full url", "label (required)" ]
-
-  [params.social.decentralized.element]
-    1 = [ "https://app.element.io/#/user/<username>:matrix.org", "matrix.org" ]
-    
-  [params.social.decentralized.funkwhale]
-    1 = [ "https://open.audio/<username>", "open.audio" ]
-    
-  [params.social.decentralized.mastodon]
-    1 = [ "https://mastodon.social/<username>", "mastodon.social" ]
-    2 = [ "https://mastodon.too/<username>", "mastodon.too" ]
-    3 = [ "https://yet.another.one/<username>", "yet.another.one" ]
-    
-  [params.social.decentralized.matrix]
-    1 = [ "https://matrix.to/#/<username>:matrix.org", "matrix.org" ]
-    2 = [ "https://matrix.to/#/<username>:other.org", "other.org" ]
-    
-  [params.social.decentralized.peertube]
-    1 = [ "https://peertube.something/accounts/<username>", "peertube.something" ]
-    
-  [params.social.decentralized.pixelfed]
-    1 = [ "https://pixelfed.social/<username>", "pixelfed.social" ]
-    
-  # The "entry" here ISN'T important. It's used for nothing.
+  # Also: element, funkwhale, matrix, peertube, pixelfed
+  # The keys inside (1, 2...) don't matter
 ```
 
-This information will also be used to generate social meta tags (ie.: rel="me" and Schema.org).
+```toml
+[params.style]
+  # Cards fill the row (flexbox) instead of having equal widths (grid)
+  socialIsFlex = false
+```
 
 ### Contact form
 
+A contact form, sent via [Formspree](https://formspree.io/):
+
+```markdown
+{{</* contact-form */>}}
+```
+
 ```toml
-# Contact form shortcode
 [params.contact]
-
-  # formspree.io Form ID
   formspreeFormId = "example"
-  
-  # Autocomplete [on/off] and min character length for message
-  autoComplete      = false # Default is false
-  messageMinLength  = 140   # Default is 140
-  
-  # Subject
-  # You can set a single value below (and it will cease to be a dropdown),
-  # BUT KEEP IT AS AN ARRAY
-  # It can also be disabled entirely (and it will turn into a text field)
-  subject = [ 'Just saying "hi"', "I know what you did last winter", "... Is that a sloth?", "お前はもう死んでいる。" ]
 
-  # Text placeholders. As usual, comment the lines if you don't want use them
-  # The "subject" below will only be used if the "subject" above doesn't exist (ie.: commented/deleted)
+  # Browser autocomplete (the default is false)
+  autoComplete = false
+
+  # Minimum length of the message (the default is 140)
+  messageMinLength = 140
+
+  # Subjects to choose from. With a single one, there's no dropdown.
+  # Without it, the subject is a text field (keep it as an array)
+  subject = [ 'Just saying "hi"', "I know what you did last winter" ]
+
   [params.contact.placeholder]
     name    = "Jane Doe"
     email   = "janedoe@example.com"
-    subject = 'Just saying "hi"'
-    message = "Aenean lacinia bibendum nulla sed consectetur. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Donec ullamcorper nulla non metus auctor fringilla nullam quis risus."
+    subject = 'Just saying "hi"' # Only used for the text field
+    message = "Hello there!"
 ```
 
-## Miscellaneous
+### Images
 
-### Rich content
+`img` and `figure` (the latter with a caption) work like Markdown images, with a few more options:
 
-Minimal effort was put here, since I don't use this feature. I recommend that you create your own `assets/scss/rich-content.scss`.
+```markdown
+{{</* img "cat.jpg" "Alt text." */>}}
+{{</* img src="cat.jpg" alt="Alt text." class="border" resize=false */>}}
+{{</* figure src="cat.jpg" caption="A *caption*." alt="Alt text." */>}}
+```
 
-### 404
+`class` can be `border` or `borderless`, and `resize=false` skips the image processing.
 
-A **really** basic 404 page can be generated via config file by using:
+### Others
+
+| Shortcode | Example | Output |
+|---|---|---|
+| `kbd` | `{{</* kbd "Ctrl" "Shift" "i" */>}}` | Keyboard keys: <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>i</kbd> |
+| `abbr` | `{{</* abbr "idk" "I don't know" */>}}` | An abbreviation with its meaning on hover. |
+| `gifoid` | `{{</* gifoid "cat" "A cat." */>}}` | `video/cat.mp4` and `.webm` as a GIF-like video (see also `video` with `autoplay`). |
+| `katex` | `{{</* katex */>}}...{{</* /katex */>}}` | Keeps math expressions as they are (see [Math](#math)). |
+
+## Customization
+
+Files in your site override the theme's, so you can copy any file from the theme and change it. These are meant for it:
+
+| File in your site | Purpose |
+|---|---|
+| `assets/scss/custom.scss` (or `static/css/custom.css`) | Extra CSS, added to the end of the theme's stylesheet. |
+| `assets/scss/colors/variables.scss` | Dark and light palettes. |
+| `assets/scss/fonts/variables.scss`, `font-face.scss` | Fonts (see [Fonts](#fonts)). |
+| `assets/scss/rich-content.scss` | Styles for embedded content (tweets, etc). |
+| `layouts/partials/custom/head-append.html` | Added to the `<head>`: favicons, scripts, etc. |
+| `layouts/partials/custom/site-title.html` | Replaces the site title in the header (with a logo, for example). |
+| `layouts/partials/custom/footer-text.html` | Replaces the `footerText` param. |
+| `i18n/<lang>.toml` | Changes or adds translations. |
+
+For a basic 404 page:
 
 ```toml
 [params.notFound]
-  title         = "Page not found"
-  description   = "This page was not found."
-  paragraph     = "Nothing to see here, buddy."
+  title       = "Page not found"
+  description = "This page was not found."
+  paragraph   = "Nothing to see here."
 ```
 
-### Custom front matter params
+## Configuration reference
 
-* `mainTitle` (string): Can be used to replace the `<title>` meta tag, if you wish it to be different from the `<h1>` (which will still use the `title` param);
-* `sitemapExclude` (true|false): Can be used to exclude a page/section from the sitemap;
-* `noindex` (true|false): Similar to the above. Can be used to exclude a page/section from being indexed (by bots or your own site). It will change the meta tag `robots` to `noindex` and the page(s) will not be added to the site's search index.
-
-### Custom partials
-
-* The site title can be replaced by creating a file named `layouts/partials/custom/site-title.html`;
-* Custom favicons can be used by creating a file named `layouts/partials/custom/head-append.html`;
-* Custom CSS can be imported into the main CSS file by creating a file named `static/css/custom.css` or `assets/scss/custom.scss`;
-* The `footerText` param can be replaced by creating a file named `layouts/partials/custom/footer-text.html`.
-
-### More params
-
-More possible params for your config file (or front matter):
+All theme params, with their defaults or an example:
 
 ```toml
-# Used only in the RSS file
-copyright = "Copyright © 2008–2021, Steve Francia and the Hugo Authors; All rights reserved."
+# Used only in the RSS feed
+copyright = "Copyright © 2025, Jane Doe; All rights reserved."
 
 [params]
-  
-  # Site description
-  description = "John Doe's personal website"
-  
-  # Author
-  author      = "John Doe"
-  authorDesc  = "Some indescribable horror."
-  
-  # Footer text
-  # Each value will become a paragraph
-  # Keep it as an array
-  footerText = [ "Generated with [Hugo](https://gohugo.io) using the [Color Your World](https://gitlab.com/rmaguiar/hugo-theme-color-your-world) theme." ]
-  
-  # Site cover, for Open Graph, Twitter Cards and Schema.org
-  # It will be used if the current page doesn't have an image cover
-  # File will be picked from the "assets" directory
-  # Comment the lines if you don't want to use it
-  cover     = "img/cover.jpg"
-  coverAlt  = "A placeholder that doesn't deserve to be described."
-  
-  # Shows a message in the footer about JavaScript being disabled
-  # The default is false
+  description = "Jane Doe's personal website"
+
+  # Author, used in meta tags, Schema.org and the RSS feed
+  author     = "Jane Doe"
+  authorDesc = "Software Engineer"
+
+  # Each value becomes a paragraph (Markdown and emoji allowed)
+  footerText = [ "Built with [Hugo](https://gohugo.io)." ]
+
+  # Site cover for Open Graph, Twitter Cards and Schema.org, from
+  # the "assets" folder. Used when a page has no cover of its own
+  cover    = "img/cover.jpg"
+  coverAlt = "Description of the cover."
+
+  # Shows a message in the footer when JavaScript is disabled (false)
   hasNoscriptNotice = true
-  
-  # Default path for images in posts
-  # ie.: "content/some-post/img"
-  # Can also be set PER PAGE
-  # It can be used to reduce repetition
-  # There's no default value
-  imgPath = "img"
-  
-  # Default classes for markup image 
-  # Modifies the default behavior of images placed via markdown
-  # Can also be set PER PAGE via front matter
-  # Available classes are: border and borderless
-  # There's no default value
+
+  # Default folders for images and videos in page bundles (no default
+  # for images, "video" for videos). Can also be set per page
+  imgPath   = "img"
+  videoPath = "video"
+
+  # Class for Markdown images: border or borderless (no default)
+  # Can also be set per page
   markupImgClass = "borderless"
-  
-  # This will append a separator (of your choice) along the site title to your <title>
-  # ie.: | ❚ - – — • ⚫
-  # You can disabled it PER PAGE by using "disableTitleSeparator" at front
-  # matter or disable it entirely by commenting the line below
+
+  # Separator between the page and site titles in the <title> tag
+  # Without it, only the page title is used
   titleSeparator = "|"
-  
+
+  # Load KaTeX on every page (false)
+  katex = false
+  katexExtensions = [ "mhchem", "copy-tex" ]
+
   [params.search]
-
-    # Enable search form (at the post list)
-    # The default value is false
-    enable = true
-
-    # Limit search results
-    # The default value is 30
-    maxResults = 15
-
-    # Limit seach field input and pattern matching
-    minLength = 2   # Default is 3
-    maxLength = 42  # Default is 32
-
-    # Optional placeholder for search field
-    placeholder = "ie.: lorem ipsum"
-
-    # Results per page
-    pageResults = 3
+    enable      = true             # Show the search form (false)
+    maxResults  = 30               # 30
+    pageResults = 10               # Results per page (10)
+    minLength   = 3                # Search field limits (3 and 32)
+    maxLength   = 32
+    placeholder = "e.g.: programming"
 
   [params.style]
-  
-    # Disable the use of system settings (prefers-color-scheme)
-    # Can be used as a workaround for Chrome on Linux
-    # (Issue 998903: Dark Gtk theme does not affect prefers-color-scheme media query)
-    # The default is false
-    ignoreSystemSettings = false
-  
-    # Use an icon or text for footnote return links
-    # The default is false
-    hasIconAsFootnoteReturnLink = true
-    
-    # For the social shortcode
-    # Use flexbox (with flex-grow) or grid (equal width)
-    # The default is false
-    socialIsFlex = false
-    
-    # Keep anchor links hidden until it's focused/hovered
-    # They will always be visible in mobile devices, regardless the option
-    # The default is false
-    hideAnchors = true
+    isDark               = true    # false
+    ignoreSystemSettings = false   # false
+    darkAccent           = "#60a5fa"
+    lightAccent          = "#2563eb"
+    presets              = [ "#34d399", "#a78bfa", "#f472b6" ]
 
-    # CSS animation transition when changing colors
-    # The default is ".5s ease"
+    useCustomChroma             = true   # true
+    hasIconAsFootnoteReturnLink = true   # Icon instead of text (false)
+    hideAnchors                 = true   # Heading links only on hover (false)
+    socialIsFlex                = false  # false
+
+    # Transition when changing modes (".3s ease")
     changeTransition = ".3s ease"
 ```
 
-## Contributing
+### Image processing
 
-Translations are welcome. I just ask that the font files are kept unmodified. If the Latin charset isn't enough, it's up to the users to choose which charsets they might need.
+```toml
+[params.imageProcessing]
+  # Resize images (Markdown, "img" and "figure")
+  autoResize = true
 
-If you have any question or suggestion, please feel free to [open an issue](https://gitlab.com/rmaguiar/hugo-theme-color-your-world/-/issues).
+  # Format for TIFF files, which browsers don't support
+  fallbackOptions = "jpeg"
 
-Confidential issues will be ignored.
+  # Sizes for Open Graph and Twitter Card images
+  openGraphFillOptions = "1200x630"
+  twitterFillOptions   = "1280x640"
 
-## Acknowledgements
+  # Extra formats, along JPEG/PNG
+  [[params.imageProcessing.extraFormats]]
+    formatOptions = "webp"
+    mediaType     = "image/webp"
+    minVersion    = "0.83"
 
-* [Font Awesome](https://fontawesome.com/) and [Fork Awesome](https://forkaweso.me/) for the icons;
+  # Sizes, in descending order. The smallest is the default image
+  [[params.imageProcessing.sizes]]
+    resizeOptions = "1280x"
+    descriptor    = "1280w"
+    minWidth      = 1280
+
+  [[params.imageProcessing.sizes]]
+    resizeOptions = "960x"
+    descriptor    = "960w"
+    minWidth      = 960
+
+  [[params.imageProcessing.sizes]]
+    resizeOptions = "640x q90"
+    descriptor    = "640w"
+    minWidth      = 640
+```
+
+## Upgrading from the original theme
+
+Sites made for the original theme work as they are, apart from these changes:
+
+* **Hugo 0.141.0 or newer** is required. Newer Hugo versions also need some site config changes:
+  * `paginate = 10` is now `[pagination]` with `pagerSize = 10` (it's an error since Hugo 0.128);
+  * `[privacy.twitter]` and `[services.twitter]` are now `[privacy.x]` and `[services.x]`.
+* **New design**, with system fonts instead of Oswald and Open Sans.
+* **New default accent colors** (`#60a5fa` and `#2563eb`). Accents set in your config still apply.
+* If you override `assets/scss/colors/variables.scss` or the font files, start again from the new files, as the variables changed.
+* The color picker is now a menu with your presets, instead of the browser's color input.
+* The `youtube` shortcode is replaced (same params as Hugo's, plus `caption`).
+
+The fixes and features from this fork are in the [commit history](https://github.com/sprytnyk/hugo-theme-color-your-world/commits/master).
+
+## Development
+
+To work on the theme, point any Hugo site at your copy:
+
+```bash
+hugo server --themesDir /path/to/parent/folder --theme hugo-theme-color-your-world
+```
+
+## Credits
+
+* [Raphael Aguiar](https://gitlab.com/rmaguiar), who made the original [Color Your World](https://gitlab.com/rmaguiar/hugo-theme-color-your-world). If it's useful to you, consider [buying him a coffee](https://ko-fi.com/rmaguiar);
+* [Font Awesome](https://fontawesome.com/), [Fork Awesome](https://forkaweso.me/) and [Lucide](https://lucide.dev/) for the icons;
 * [@nickpunt](https://gist.github.com/nickpunt) and [@regpaq](https://gist.github.com/regpaq) for the [dark/light mode switcher](https://gist.github.com/regpaq/04c67e8aceecbf0fd819945835412d1f) idea;
 * Glenn McComb and [his article](https://glennmccomb.com/articles/how-to-build-custom-hugo-pagination/) about custom pagination with Hugo;
-* JeffProd and [his article](https://en.jeffprod.com/blog/2018/build-your-own-Hugo-website-search-engine/) about building a custom search engine for Hugo;
-* Many people [on this forked gist](https://gist.github.com/eddiewebb/735feb48f50f0ddd65ae5606a1cb41ae) for their takes on Fuse.js + Hugo;
-* Philip Walton and [his sticky footer solution](https://philipwalton.github.io/solved-by-flexbox/demos/sticky-footer/) with Flexbox;
-* [Fuse.js](https://github.com/krisk/Fuse) (now replaced with Pagefind);
-* [Pagefind](https://pagefind.app/);
-* [KaTeX](https://katex.org/);
-* [@britonad](https://gitlab.com/britonad) for the Ukranian translation;
-* [@moanos](https://gitlab.com/moanos) for the German translation;
+* [Pagefind](https://pagefind.app/) and [KaTeX](https://katex.org/);
+* [@britonad](https://gitlab.com/britonad) for the Ukrainian translation, and [@moanos](https://gitlab.com/moanos) for the German one;
 * Hugo and [its community](https://discourse.gohugo.io/).
 
-## Sponsoring
-
-If this repo was useful or helpful to you in any way, please consider buying me a coffee:
-
-[![Buy Me a Coffee](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/rmaguiar)
+Released under the [MIT License](LICENSE).
