@@ -34,8 +34,6 @@
 {{ $videoPath := .Page.Params.videoPath | default "video" }}
 {{ $filePath  := path.Join $videoPath $fileName }}
 
-{{ $pageDir := $.Page.File.Dir }}
-
 <!-- Make sure video thumbnails are ignored -->
 {{ $videoFormats := slice "mp4" "webm" }}
 
@@ -43,16 +41,11 @@
 {{ $filesData := slice }}
 
 
+<!-- Missing formats are skipped -->
 {{ range $videoFormats }}
-
-  {{ $resourcePath := ($.Page.Resources.GetMatch (printf "%s.%s" $filePath .)) }}
-
-  {{ $contentPath := path.Join $pageDir $resourcePath }}
-
-  {{ $file := os.Stat $contentPath }}
-  
-  {{ $filesData = $filesData | append (dict "mediaType" $resourcePath.MediaType "size" $file.Size "source" $resourcePath.RelPermalink) }}
-  
+  {{ with $.Page.Resources.GetMatch (printf "%s.%s" $filePath .) }}
+    {{ $filesData = $filesData | append (dict "mediaType" .MediaType "size" (len .Content) "source" .RelPermalink) }}
+  {{ end }}
 {{ end }}
 
 

@@ -6,16 +6,14 @@
     Ctrl + Shift + i
 -->
 
-{{ $semanticKeyboardKeys := slice }}
+{{- $semanticKeyboardKeys := slice -}}
 
-{{ range .Params }}
-  {{ $currentKey := printf "<kbd>%s</kbd>" . }}
+{{- range .Params -}}
+  {{- $semanticKeyboardKeys = $semanticKeyboardKeys | append (printf "<kbd>%s</kbd>" (htmlEscape .)) -}}
+{{- end -}}
 
-  {{ $semanticKeyboardKeys = $semanticKeyboardKeys | append $currentKey }}
-{{ end }}
-
-{{ if gt $semanticKeyboardKeys 1 }}
-  <kbd>{{- delimit $semanticKeyboardKeys "+" -}}</kbd>
-{{ else }}
-  {{- delimit $semanticKeyboardKeys "+" -}}
-{{ end }}
+{{- if gt (len $semanticKeyboardKeys) 1 -}}
+  <kbd>{{- delimit $semanticKeyboardKeys "+" | safeHTML -}}</kbd>
+{{- else -}}
+  {{- delimit $semanticKeyboardKeys "+" | safeHTML -}}
+{{- end -}}
