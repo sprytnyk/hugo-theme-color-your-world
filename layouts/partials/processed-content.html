@@ -62,7 +62,7 @@
 
 
 <!-- Replace the footnote return links with a text label -->
-{{ $footnoteReturnLink := `(<a (?:.*) class="footnote-backref" (?:.*)>)(?:.*)(</a>)` }}
+{{ $footnoteReturnLink := `(<a [^>]*class="footnote-backref"[^>]*>)[^<]*(</a>)` }}
 
 {{ $improvedFootnoteReturnLink := printf `${1}%s${2}` (T "return") }}
 
