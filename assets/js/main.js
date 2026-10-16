@@ -14,6 +14,28 @@
 
 const rootElement = document.documentElement;
 
+// localStorage can throw (privacy modes, blocked site data),
+// which would stop the whole script
+const storage = {
+  get(key) {
+    try {
+      return localStorage.getItem(key);
+    } catch (e) {
+      return null;
+    }
+  },
+  set(key, value) {
+    try {
+      localStorage.setItem(key, value);
+    } catch (e) {}
+  },
+  remove(key) {
+    try {
+      localStorage.removeItem(key);
+    } catch (e) {}
+  }
+};
+
 // Set the dark mode
 function setDark() {
   rootElement.setAttribute('data-mode', 'dark');
@@ -33,7 +55,7 @@ function setLight() {
  * 3. HTML data-* attribute (data-mode)
  */
 
-const localMode = localStorage.getItem('mode');
+const localMode = storage.get('mode');
 
 {{ if not .Site.Params.Style.ignoreSystemSettings }}
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
@@ -81,8 +103,8 @@ function getAccent() {
   
   const currentMode = rootElement.getAttribute('data-mode');
   
-  const localDarkAccent = localStorage.getItem('darkAccent');
-  const localLightAccent = localStorage.getItem('lightAccent');
+  const localDarkAccent = storage.get('darkAccent');
+  const localLightAccent = storage.get('lightAccent');
   
   let currentAccent;
 
@@ -108,9 +130,9 @@ function getAccent() {
   
     if (
       (currentMode === 'dark') &&
-      (localStorage.getItem('darkAccent') !== null) ||
+      (storage.get('darkAccent') !== null) ||
       (currentMode === 'light') &&
-      (localStorage.getItem('lightAccent') !== null)
+      (storage.get('lightAccent') !== null)
     ) {
       console.log('Custom accent color defined. Loading custom ' +
       currentMode + ' accent (' + currentAccent + ').');
@@ -159,9 +181,9 @@ document.addEventListener('DOMContentLoaded', function() {
     rootStyle.setProperty('--accent', selectedAccent);
     
     if (rootElement.getAttribute('data-mode') === 'dark') {
-      localStorage.setItem('darkAccent', selectedAccent);
+      storage.set('darkAccent', selectedAccent);
     } else {
-      localStorage.setItem('lightAccent', selectedAccent);
+      storage.set('lightAccent', selectedAccent);
     }
     
     updateAccent();
@@ -185,15 +207,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (rootElement.getAttribute('data-mode') === 'light') {
       setDark();
-      localStorage.setItem('mode', 'dark');
+      storage.set('mode', 'dark');
     } else {
       setLight();
-      localStorage.setItem('mode', 'light');
+      storage.set('mode', 'light');
     }
     
     {{ if hugo.IsDevelopment }}
       console.log('Local: ' +
-      capitalize(localStorage.getItem('mode') + ' mode set.'));
+      capitalize(storage.get('mode') + ' mode set.'));
     {{ end }}
     
     updateAccent();
@@ -237,9 +259,8 @@ document.addEventListener('DOMContentLoaded', function() {
       updateAccent();
       
       // System settings do not require localStorage
-      if (localMode !== null) {
-        localStorage.removeItem('mode');
-      }
+      // (the stored mode may have been set after the page loaded)
+      storage.remove('mode');
 
     }
 
