@@ -11,8 +11,10 @@
     <nav aria-label="{{ T "ariaMainMenu" }}">
       <ul>
         {{ range . }}
+          {{ $url := .URL | relLangURL }}
+          {{ $isCurrent := or (eq $url $.RelPermalink) (and (ne $url ("/" | relLangURL)) (hasPrefix $.RelPermalink $url)) }}
           <li>
-            <a class="btn" href="{{ .URL | relLangURL }}">{{ .Name }}</a>
+            <a href="{{ $url }}"{{ if $isCurrent }} aria-current="page"{{ end }}>{{ .Name }}</a>
           </li>
         {{ end }}
       </ul>

@@ -2,11 +2,19 @@
 // Source: https://github.com/mpchadwick/pygments-high-contrast-stylesheets/blob/gh-pages/solarized-dark.css
 
 .chroma,
-pre,
-p code,
-li code {
+pre {
   color: #93a1a1;
-  background-color: #002b36;
+  background-color: $code-background;
+}
+
+// Inline code stays light, so it doesn't stand out too much in the text
+p code,
+li code,
+td code,
+th code {
+  color: #0f172a;
+  background-color: #f1f5f9;
+  box-shadow: inset 0 0 0 1px #e2e8f0;
 }
 
 .chroma .lntd {

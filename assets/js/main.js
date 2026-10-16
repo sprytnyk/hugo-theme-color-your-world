@@ -164,7 +164,7 @@ metaThemeColor.setAttribute('content', activeAccent);
 
 document.addEventListener('DOMContentLoaded', function() {
 
-  const colorPicker = document.querySelector('footer input');
+  const colorPicker = document.querySelector('.mode-picker input');
   
   function updateAccent() {
     const activeAccent = getAccent();
@@ -195,8 +195,6 @@ document.addEventListener('DOMContentLoaded', function() {
   // Smooth transition, only when changing modes (and not loading pages)
   function smoothTransition() {
     document.body.style.transition =
-    document.querySelector('header').style.transition =
-    document.querySelector('footer').style.transition =
     '{{ printf "background-color %[1]s, color %[1]s" $changeTransition }}';
   }
   
@@ -270,6 +268,6 @@ document.addEventListener('DOMContentLoaded', function() {
   {{ end }}
 
   // Mode change button listener
-  document.querySelector('footer button')
+  document.querySelector('.mode-picker button')
     .addEventListener('click', localModeChange);
 });

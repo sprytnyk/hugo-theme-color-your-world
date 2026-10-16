@@ -26,8 +26,8 @@
       {{ if ne $pag.PageNumber 1 }}
       <li>
         <a class="btn" href="{{ $pag.First.URL }}" aria-label="{{ T "ariaGoToFirst" }}">
-          <svg aria-hidden="true">
-            <use transform="rotate(180) translate(-18 -18)" xlink:href="{{ $svgBundleLink }}#angle-double-right"/>
+          <svg class="flip" aria-hidden="true">
+            <use xlink:href="{{ $svgBundleLink }}#angle-double-right"/>
           </svg>
         </a>
       </li>
@@ -37,7 +37,7 @@
       {{ if $pag.HasPrev }}
       <li>
         <a class="btn" href="{{ $pag.Prev.URL }}" aria-label="{{ T "ariaGoToPrev" }}">
-          <svg transform="rotate(180)" aria-hidden="true">
+          <svg class="flip" aria-hidden="true">
             <use xlink:href="{{ $svgBundleLink }}#angle-right"/>
           </svg>
         </a>

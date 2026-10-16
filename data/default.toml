@@ -5,8 +5,8 @@
   maxLength = 32
 
 [style]
-  darkAccent   = "#1dbc91"
-  lightAccent  = "#1f676b"
+  darkAccent   = "#60a5fa"
+  lightAccent  = "#2563eb"
   
   changeTransition = ".3s ease"
 

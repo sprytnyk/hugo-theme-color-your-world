@@ -1,8 +1,17 @@
-// Border radius used in buttons
-$border-radius: 2px;
+// Border radii
+$radius-sm:   .5rem;
+$radius:      .75rem;
+$radius-lg:   1.5rem;
+$radius-full: 9999px;
+
+// Kept for custom stylesheets
+$border-radius: $radius-sm;
 
 // Breakpoint for mobile devices
-$mobile-breakpoint: 768px; 
+$mobile-breakpoint: 640px;
+
+// Width of the main column
+$content-width: 56rem;
 
 // Max height for items like images, code fences, etc
 $box-max-height: 75vh;

@@ -4,9 +4,11 @@
 .chroma,
 pre,
 p code,
-li code {
+li code,
+td code,
+th code {
   color: #f8f8f2;
-  background: #272822;
+  background: $code-background;
 }
 
 .chroma .err {

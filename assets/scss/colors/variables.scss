@@ -1,49 +1,52 @@
+// Palettes based on Tailwind's "slate" scale
+
 // Dark mode palette
-$dark-background:         #1f1f1f;
-$dark-foreground:         #bbb;
-  
-$dark-alt-background:     #1c1c1c;
-$dark-alt-foreground:     #ddd;
-  
-$dark-details:            #1a1a1a;
-$dark-error-color:        #ff3131;
+$dark-background:         #0f172a; // slate-900
+$dark-background-alt:     #1e293b; // slate-800
+$dark-foreground:         #cbd5e1; // slate-300
+$dark-heading:            #ffffff;
+$dark-muted:              #94a3b8; // slate-400
 
-$dark-bg-modifier:        rgba(255,255,255,.3);
+$dark-card:               #1e293b; // slate-800
+$dark-border:             #334155; // slate-700
+$dark-row:                rgba(51, 65, 85, .5);
+$dark-row-hover:          #334155;
 
-$dark-input-background:   #222;
-$dark-input-foreground:   #f0f0f0;
-$dark-input-border:       #262626;
+$dark-error-color:        #fb7185; // rose-400
+$dark-on-accent:          #0f172a;
 
-$dark-letterpress:        rgba(255,255,255,.2);
+$dark-input-background:   #0f172a;
+$dark-input-foreground:   #f1f5f9;
+$dark-input-border:       #334155;
+
+$dark-shadow:             0 25px 50px -12px rgba(0, 0, 0, .25);
 
 
 // Light mode palette
-$light-background:        #ddd;
-$light-foreground:        #444;
+$light-background:        #f8fafc; // slate-50
+$light-background-alt:    #e2e8f0; // slate-200
+$light-foreground:        #334155; // slate-700
+$light-heading:           #0f172a; // slate-900
+$light-muted:             #64748b; // slate-500
 
-$light-alt-background:    #d6d6d6;
-$light-alt-foreground:    #333;
-  
-$light-details:           #fdfdfd;
-$light-error-color:       #c70000;
+$light-card:              #ffffff;
+$light-border:            #e2e8f0; // slate-200
+$light-row:               #f1f5f9; // slate-100
+$light-row-hover:         #e2e8f0;
 
-$light-bg-modifier:       rgba(0,0,0,.3);
+$light-error-color:       #e11d48; // rose-600
+$light-on-accent:         #ffffff;
 
-$light-input-background:  #fefefe;
-$light-input-foreground:  #111;
-$light-input-border:      #ccc;
+$light-input-background:  #ffffff;
+$light-input-foreground:  #0f172a;
+$light-input-border:      #cbd5e1; // slate-300
 
-$light-letterpress:       rgba(0,0,0,.2);
+$light-shadow:            0 20px 40px -16px rgba(15, 23, 42, .15);
 
 
 // Lazy way to deter images that can be too bright
-$img-filter:
-  contrast(.85)
-  grayscale(.3);
-
+$img-filter: brightness(.9);
 
 
 // General purpose
-$box-border:    #222;
-$error-color:   red;
-$selected-fg:   #f0f0f0;
+$code-background: #0f172a; // slate-900
