@@ -786,6 +786,8 @@ th code {
 }
 
 article > pre,
+blockquote > pre,
+li > pre,
 .highlight > pre,
 .highlight > .chroma,
 .katex-display {
@@ -799,6 +801,8 @@ article > pre,
 }
 
 article > pre,
+blockquote > pre,
+li > pre,
 .highlight > pre,
 .katex-display {
   padding: 1rem 1.25rem;
@@ -813,6 +817,8 @@ article > pre,
 }
 
 article > pre,
+blockquote > pre,
+li > pre,
 .scroll,
 .katex-display,
 .highlight > pre,
