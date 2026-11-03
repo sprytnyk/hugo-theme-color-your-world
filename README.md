@@ -323,8 +323,7 @@ All the options, with their defaults:
   category   = "Announcements"
   categoryId = "DIC_..."
 
-  mapping          = "pathname" # How giscus finds a page's discussion: pathname, url, title, og:title, specific or number
-  term             = ""         # The discussion term or number, for "specific" and "number"
+  mapping          = "pathname" # How giscus finds a page's discussion: pathname, url, title or og:title
   strict           = false      # Match titles exactly, by hash
   reactionsEnabled = true       # Reactions to the post
   emitMetadata     = false      # Send discussion metadata to the page

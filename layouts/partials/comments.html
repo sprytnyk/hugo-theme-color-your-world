@@ -46,7 +46,6 @@
         data-category="{{ $g.category }}"
         data-category-id="{{ $g.categoryId }}"
         data-mapping="{{ $g.mapping | default "pathname" }}"
-        {{- with $g.term }} data-term="{{ . }}"{{ end }}
         data-strict="{{ cond (eq (index $g "strict") true) "1" "0" }}"
         data-reactions-enabled="{{ cond (eq (index $g "reactionsenabled") false) "0" "1" }}"
         data-emit-metadata="{{ cond (eq (index $g "emitmetadata") true) "1" "0" }}"
