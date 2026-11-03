@@ -1,0 +1,19 @@
+# Settings for taplo, the TOML formatter run by pre-commit
+
+[formatting]
+  # Indent keys under their table, and subtables under their parent
+  indent_entries = true
+  indent_tables  = true
+
+  # Line up the = of keys next to each other
+  align_entries = true
+
+  # Keep arrays on several lines when they're written that way
+  array_auto_collapse = false
+
+# Translations keep their keys flush left
+[[rule]]
+  include = ["i18n/*.toml"]
+
+  [rule.formatting]
+    indent_entries = false
