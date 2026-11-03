@@ -3,14 +3,12 @@
 
 name = "Color Your World"
 license = "MIT"
-licenselink = "https://gitlab.com/rmaguiar/hugo-theme-color-your-world/blob/master/LICENSE"
-description = "A minimalist theme for personal blogs with a colored twist."
+licenselink = "https://github.com/sprytnyk/hugo-theme-color-your-world/blob/master/LICENSE"
+description = "A minimal, privacy-aware theme for personal sites and technical blogs, with dark and light modes and an accent color visitors pick."
+min_version = "0.141.0"
 
 # The home page of the theme, where the source can be found.
-homepage = "https://gitlab.com/rmaguiar/hugo-theme-color-your-world"
-
-# If you have a running demo of the theme.
-demosite = "https://color-your-world-demo.netlify.app"
+homepage = "https://github.com/sprytnyk/hugo-theme-color-your-world"
 
 tags = [
   "accessible",
@@ -36,7 +34,12 @@ features = [
   "syntax highlighting"
 ]
 
-# If the theme has a single author
 [author]
-  name = "rmaguiar"
-  homepage = "https://rmaguiar.keybase.pub"
+  name = "Vladyslav Krylasov"
+  homepage = "https://github.com/sprytnyk"
+
+# This is a fork of the original Color Your World
+[original]
+  author = "Raphael Aguiar"
+  homepage = "https://gitlab.com/rmaguiar"
+  repo = "https://gitlab.com/rmaguiar/hugo-theme-color-your-world"
