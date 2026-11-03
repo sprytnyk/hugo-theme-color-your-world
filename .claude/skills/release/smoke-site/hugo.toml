@@ -2,11 +2,11 @@
 # links the theme in and builds it. It turns on most of the theme's features.
 # The giscus settings are in ../giscus.toml, which smoke.sh adds.
 
-baseURL = "https://example.org/"
-title = "Smoke test"
-theme = "color-your-world"
+baseURL                = "https://example.org/"
+title                  = "Smoke test"
+theme                  = "color-your-world"
 defaultContentLanguage = "en"
-copyright = "Copyright © 2026, Jane Doe"
+copyright              = "Copyright © 2026, Jane Doe"
 
 [pagination]
   pagerSize = 10
@@ -16,41 +16,41 @@ copyright = "Copyright © 2026, Jane Doe"
 
 # Block the network, so the YouTube shortcode has to fall back to its placeholder
 [security.http]
-  urls = [ "^$" ]
+  urls = ["^$"]
 
 [privacy.youtube]
   privacyEnhanced = true
 
 [languages.en]
   languageName = "English"
-  weight = 1
+  weight       = 1
 
 [languages.uk]
   languageName = "Українська"
-  weight = 2
+  weight       = 2
 
 [params]
-  description = "Test site for the release skill"
-  author = "Jane Doe"
-  authorDesc = "Software Engineer"
-  footerText = [ "Built with [Hugo](https://gohugo.io)." ]
+  description       = "Test site for the release skill"
+  author            = "Jane Doe"
+  authorDesc        = "Software Engineer"
+  footerText        = ["Built with [Hugo](https://gohugo.io)."]
   hasNoscriptNotice = true
-  titleSeparator = "|"
+  titleSeparator    = "|"
 
   [params.search]
     enable = true
 
   [params.style]
-    isDark = true
-    presets = [ "#34d399", "#a78bfa" ]
+    isDark                      = true
+    presets                     = ["#34d399", "#a78bfa"]
     hasIconAsFootnoteReturnLink = true
-    hideAnchors = true
+    hideAnchors                 = true
 
   [params.social.centralized]
-    github = [ "janedoe" ]
+    github = ["janedoe"]
 
   [params.social.decentralized.mastodon]
-    1 = [ "https://mastodon.social/@janedoe", "mastodon.social" ]
+    1 = ["https://mastodon.social/@janedoe", "mastodon.social"]
 
   [params.contact]
     formspreeFormId = "example"

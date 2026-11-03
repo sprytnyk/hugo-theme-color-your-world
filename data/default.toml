@@ -5,15 +5,15 @@
   maxLength = 32
 
 [style]
-  darkAccent   = "#60a5fa"
-  lightAccent  = "#2563eb"
+  darkAccent  = "#60a5fa"
+  lightAccent = "#2563eb"
 
   changeTransition = ".3s ease"
 
 [notFound]
-  title         = "Page not found"
-  description   = "This page was not found."
-  paragraph     = "Nothing to see here, buddy."
+  title       = "Page not found"
+  description = "This page was not found."
+  paragraph   = "Nothing to see here, buddy."
 
 [libs]
   katex = "0.16.11"
@@ -32,28 +32,28 @@
   # Fill options for Open Graph and Twitter Card images
   # These images are also used in the Schema.org structured data
   openGraphFillOptions = "1200x630"
-  twitterFillOptions = "1280x640"
+  twitterFillOptions   = "1280x640"
 
   # Extra formats (along JPEG/PNG)
   [[imageProcessing.extraFormats]]
     formatOptions = "webp"
-    mediaType = "image/webp"
-    minVersion = "0.83"
+    mediaType     = "image/webp"
+    minVersion    = "0.83"
 
   # Sizes at which images are resized
   # Keep the sizes in descending order
   # The smallest size will be used as the default image
   [[imageProcessing.sizes]]
     resizeOptions = "1280x"
-    descriptor = "1280w"
-    minWidth = 1280
+    descriptor    = "1280w"
+    minWidth      = 1280
 
   [[imageProcessing.sizes]]
     resizeOptions = "960x"
-    descriptor = "960w"
-    minWidth = 960
+    descriptor    = "960w"
+    minWidth      = 960
 
   [[imageProcessing.sizes]]
     resizeOptions = "640x q90"
-    descriptor = "640w"
-    minWidth = 640
+    descriptor    = "640w"
+    minWidth      = 640
