@@ -1,0 +1,63 @@
+// Theme for the giscus comments, in the site's colors
+// Built once per mode (see layouts/partials/comments.html) as
+// css/giscus-dark.css and css/giscus-light.css
+
+@import 'colors/variables';
+
+// Whatever isn't set below (code highlighting, alerts...)
+// comes from giscus's high contrast theme
+@import url('https://giscus.app/themes/{{ .mode }}_high_contrast.css');
+
+$accent:     {{ .accent }};
+$fg:         ${{ .mode }}-foreground;
+$muted:      ${{ .mode }}-muted;
+$card:       ${{ .mode }}-card;
+$border:     ${{ .mode }}-border;
+$row:        ${{ .mode }}-row;
+$row-hover:  ${{ .mode }}-row-hover;
+$error:      ${{ .mode }}-error-color;
+$on-accent:  ${{ .mode }}-on-accent;
+$input-bg:   ${{ .mode }}-input-background;
+
+main {
+  --color-fg-default: #{$fg};
+  --color-fg-muted: #{$muted};
+  --color-fg-subtle: #{$muted};
+
+  --color-canvas-default: #{$card};
+  --color-canvas-overlay: #{$card};
+  --color-canvas-inset: #{$input-bg};
+  --color-canvas-subtle: #{$row};
+
+  --color-border-default: #{$border};
+  --color-border-muted: #{$border};
+
+  --color-accent-fg: #{$accent};
+  --color-accent-emphasis: #{$accent};
+  --color-accent-muted: #{rgba($accent, .4)};
+  --color-accent-subtle: #{rgba($accent, .1)};
+
+  --color-danger-fg: #{$error};
+
+  --color-btn-text: #{$fg};
+  --color-btn-bg: #{$row};
+  --color-btn-border: #{$border};
+  --color-btn-hover-bg: #{$row-hover};
+  --color-btn-hover-border: #{$border};
+  --color-btn-selected-bg: #{$row-hover};
+
+  --color-btn-primary-text: #{$on-accent};
+  --color-btn-primary-bg: #{$accent};
+  --color-btn-primary-border: transparent;
+  --color-btn-primary-hover-bg: #{mix($accent, $fg, 85%)};
+  --color-btn-primary-hover-border: transparent;
+  --color-btn-primary-selected-bg: #{$accent};
+  --color-btn-primary-disabled-text: #{$on-accent};
+  --color-btn-primary-disabled-bg: #{rgba($accent, .5)};
+  --color-btn-primary-disabled-border: transparent;
+
+  --color-segmented-control-button-bg: #{$card};
+
+  --color-social-reaction-bg-hover: #{$row-hover};
+  --color-social-reaction-bg-reacted-hover: #{rgba($accent, .25)};
+}

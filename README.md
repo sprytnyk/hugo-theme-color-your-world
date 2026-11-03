@@ -20,6 +20,7 @@ This is a fork of [Color Your World](https://gitlab.com/rmaguiar/hugo-theme-colo
 * [Appearance](#appearance)
 * [Writing content](#writing-content)
 * [Search](#search)
+* [Comments](#comments)
 * [Shortcodes](#shortcodes)
 * [Customization](#customization)
 * [Configuration reference](#configuration-reference)
@@ -37,12 +38,13 @@ This is a fork of [Color Your World](https://gitlab.com/rmaguiar/hugo-theme-colo
 * Videos attached to posts, with Markdown or a shortcode;
 * YouTube embeds that load nothing from YouTube until the visitor presses play;
 * Search via [Pagefind](https://pagefind.app/);
+* Optional comments via [giscus](https://giscus.app/), stored in GitHub Discussions and drawn in the site's colors;
 * Responsive images (resized and converted to WebP at build time) and lazy loading;
 * Math via [KaTeX](https://katex.org/);
 * Social links (centralized and decentralized platforms) and a contact form (via [Formspree](https://formspree.io/));
 * Open Graph, Twitter Cards and Schema.org meta tags, plus `rel="me"` links;
 * Multilingual, with English, German, Portuguese and Ukrainian translations;
-* Keyboard friendly, and works without JavaScript (except for search, KaTeX and the color picker);
+* Keyboard friendly, and works without JavaScript (except for search, comments, KaTeX and the color picker);
 * Privacy-aware: no Google Analytics, Google Fonts, Disqus, etc.
 
 ## Requirements
@@ -183,6 +185,7 @@ Besides Hugo's own (`title`, `date`, `lastmod`, `tags`, `categories`, `draft`, .
 | `description` | Used in meta tags and the RSS feed. |
 | `cover`, `coverAlt` | Cover image (page resource) shown under the title, and used for Open Graph, Twitter Cards and Schema.org. |
 | `toc` | `true` shows a table of contents. |
+| `comments` | `false` hides the comments on a post, `true` shows them on any other page. See [Comments](#comments). |
 | `katex` or `math` | `true` loads KaTeX on the page. |
 | `katexExtensions` | KaTeX extensions to load: `[ mhchem, copy-tex ]`. |
 | `mainTitle` | Replaces the `<title>` tag, if it should differ from the `<h1>`. |
@@ -265,6 +268,75 @@ Search runs in the browser with [Pagefind](https://pagefind.app/), which indexes
    To try it locally, serve the `public` folder (for example with `npx -y pagefind --site public --serve`), since `hugo server` doesn't run Pagefind.
 
 Only posts and pages are indexed, not lists. Pages with `sitemapExclude` or `noindex` are left out.
+
+## Comments
+
+Comments use [giscus](https://giscus.app/), which stores them in your repo's GitHub Discussions. Visitors sign in with GitHub to comment.
+
+1. Make the repo public, enable Discussions and install the [giscus app](https://github.com/apps/giscus) on it.
+2. Fill in the repo and category on [giscus.app](https://giscus.app/), and copy `data-repo-id` and `data-category-id` from the snippet it makes.
+3. Add them to your config:
+
+   ```toml
+   [params.giscus]
+     repo       = "owner/repo"
+     repoId     = "R_..."
+     category   = "Announcements"
+     categoryId = "DIC_..."
+   ```
+
+Without `repo`, `repoId` and `categoryId`, the theme adds nothing to the site.
+
+The theme shows comments on posts, the pages in `mainSections`, in a card under the post. Set `comments: false` in the front matter to hide them on a post, or `comments: true` to show them on any other page.
+
+The theme builds two CSS files from your palette and default accents: `/css/giscus-dark.css` and `/css/giscus-light.css`. They sit on top of giscus's high contrast themes, and the comments switch between them with the mode. The accent a visitor picks doesn't reach the comments, only the defaults do. To change the colors, copy `assets/scss/giscus.scss` to your site, or point `darkTheme` and `lightTheme` to other files.
+
+giscus loads these files from its own domain, so your server has to send an `Access-Control-Allow-Origin` header with them. GitHub Pages sends it by default. On Netlify and Cloudflare Pages, add a `static/_headers` file:
+
+```
+/css/giscus-dark.css
+  Access-Control-Allow-Origin: *
+/css/giscus-light.css
+  Access-Control-Allow-Origin: *
+```
+
+On other hosts, look up how to add a response header in their docs. For `hugo server`, add this to your config:
+
+```toml
+[server]
+  [[server.headers]]
+    for = "/css/giscus-*"
+    [server.headers.values]
+      Access-Control-Allow-Origin = "*"
+```
+
+Without the header, the browser blocks the files.
+
+giscus loads only when the visitor scrolls near the comments. Set `loading = "eager"` to load it with the page. Without JavaScript there are no comments. Loading giscus connects the visitor's browser to giscus.app.
+
+All the options, with their defaults:
+
+```toml
+[params.giscus]
+  repo       = "owner/repo"
+  repoId     = "R_..."
+  category   = "Announcements"
+  categoryId = "DIC_..."
+
+  mapping          = "pathname" # How giscus finds a page's discussion: pathname, url, title, og:title, specific or number
+  term             = ""         # The discussion term or number, for "specific" and "number"
+  strict           = false      # Match titles exactly, by hash
+  reactionsEnabled = true       # Reactions to the post
+  emitMetadata     = false      # Send discussion metadata to the page
+  inputPosition    = "bottom"   # Comment box at the top or bottom
+  lang             = ""         # Defaults to the page's language
+  loading          = "lazy"     # Or "eager", to load with the page
+
+  # Themes for each mode: a giscus theme such as "dark_dimmed", or the URL
+  # of a CSS file. Without them, the theme uses its own files
+  darkTheme  = ""
+  lightTheme = ""
+```
 
 ## Shortcodes
 
@@ -412,6 +484,7 @@ Files in your site override the theme's, so you can copy any file from the theme
 | `assets/scss/custom.scss` (or `static/css/custom.css`) | Extra CSS, added to the end of the theme's stylesheet. |
 | `assets/scss/colors/variables.scss` | Dark and light palettes. |
 | `assets/scss/fonts/variables.scss`, `font-face.scss` | Fonts (see [Fonts](#fonts)). |
+| `assets/scss/giscus.scss` | Colors of the comments. See [Comments](#comments). |
 | `assets/scss/rich-content.scss` | Styles for embedded content (tweets, etc). |
 | `layouts/partials/custom/head-append.html` | Added to the `<head>`: favicons, scripts, etc. |
 | `layouts/partials/custom/site-title.html` | Replaces the site title in the header (with a logo, for example). |
@@ -470,6 +543,13 @@ copyright = "Copyright © 2025, Jane Doe; All rights reserved."
   # Load KaTeX on every page (false)
   katex = false
   katexExtensions = [ "mhchem", "copy-tex" ]
+
+  # Comments. See the Comments section for all options
+  [params.giscus]
+    repo       = "owner/repo"
+    repoId     = "R_..."
+    category   = "Announcements"
+    categoryId = "DIC_..."
 
   [params.search]
     enable      = true             # Show the search form (false)

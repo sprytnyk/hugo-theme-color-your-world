@@ -7,6 +7,15 @@
 // Get CSS transition
 {{ $changeTransition := .Site.Params.Style.changeTransition | default .Site.Data.default.style.changeTransition }}
 
+// Comments (giscus), if any language sets them up. This file is built
+// once and shared by all languages, so check every one of them
+{{ $giscus := false }}
+{{ range .Sites }}
+  {{ if .Params.giscus }}
+    {{ $giscus = true }}
+  {{ end }}
+{{ end }}
+
 // =================================================
 // Mode switcher + Custom accent color
 // Based on: https://gist.github.com/regpaq/04c67e8aceecbf0fd819945835412d1f
@@ -170,6 +179,63 @@ document.addEventListener('DOMContentLoaded', function() {
   const customInput = accentMenu.querySelector('input[type=color]');
   const swatches = accentMenu.querySelectorAll('.swatch[data-color]');
 
+  {{ if $giscus }}
+
+    // Comments via giscus, see layouts/partials/comments.html
+    const giscusOrigin = 'https://giscus.app';
+    const giscusBox = document.querySelector('.giscus[data-repo]');
+    let giscusScript = null;
+
+    // Theme of the current mode: a giscus theme name or a CSS URL.
+    // giscus loads it from its own domain, so a path like "/css/..."
+    // (baseURL = "/") has to become a full URL on this site
+    function giscusTheme() {
+      const theme = rootElement.getAttribute('data-mode') === 'dark' ?
+        giscusBox.dataset.themeDark : giscusBox.dataset.themeLight;
+
+      return /^\.{0,2}\//.test(theme) ?
+        new URL(theme, location.href).href : theme;
+    }
+
+    // Switch the comments' theme along with the mode
+    function updateComments() {
+      if (!giscusScript) {
+        return;
+      }
+
+      const theme = giscusTheme();
+      const frame = giscusBox.querySelector('iframe.giscus-frame');
+
+      if (!frame) {
+        // The giscus script hasn't run yet
+        giscusScript.dataset.theme = theme;
+      } else if (frame.classList.contains('giscus-frame--loading')) {
+        // Not loaded yet (lazy loading), so change what it will load
+        const src = new URL(frame.src);
+        src.searchParams.set('theme', theme);
+        frame.src = src.toString();
+      } else {
+        frame.contentWindow.postMessage(
+          { giscus: { setConfig: { theme: theme } } }, giscusOrigin);
+      }
+    }
+
+    if (giscusBox) {
+      giscusScript = document.createElement('script');
+      Object.assign(giscusScript.dataset, giscusBox.dataset);
+      delete giscusScript.dataset.themeDark;
+      delete giscusScript.dataset.themeLight;
+      giscusScript.dataset.theme = giscusTheme();
+
+      giscusScript.src = giscusOrigin + '/client.js';
+      giscusScript.crossOrigin = 'anonymous';
+      giscusScript.async = true;
+
+      document.body.appendChild(giscusScript);
+    }
+
+  {{ end }}
+
   function accentKey() {
     return rootElement.getAttribute('data-mode') === 'dark' ?
       'darkAccent' : 'lightAccent';
@@ -303,6 +369,10 @@ document.addEventListener('DOMContentLoaded', function() {
       storage.set('mode', 'light');
     }
 
+    {{ if $giscus }}
+      updateComments();
+    {{ end }}
+
     {{ if hugo.IsDevelopment }}
       console.log('Local: ' +
       capitalize(storage.get('mode') + ' mode set.'));
@@ -340,6 +410,10 @@ document.addEventListener('DOMContentLoaded', function() {
       } else {
         setLight();
       }
+
+      {{ if $giscus }}
+        updateComments();
+      {{ end }}
 
       {{ if hugo.IsDevelopment }}
         console.log('System: ' +

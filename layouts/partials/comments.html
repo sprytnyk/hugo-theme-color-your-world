@@ -1,0 +1,63 @@
+<!--
+  Comments via giscus (https://giscus.app), only when the repo is set.
+
+  Shown on pages of the main sections, unless "comments: false" is set
+  in the front matter ("comments: true" shows them on any other page).
+
+  The giscus script is added by main.js, which picks the dark or light
+  theme below and switches it along with the mode.
+-->
+
+{{- $g := site.Params.giscus -}}
+
+{{- if and $g $g.repo $g.repoId $g.categoryId -}}
+
+  {{- $show := in site.MainSections .Section -}}
+  {{- if isset .Params "comments" -}}
+    {{- $show = .Params.comments -}}
+  {{- end -}}
+
+  {{- if $show -}}
+
+    <!--
+      Themes in the site's colors (assets/scss/giscus.scss), at fixed URLs.
+      giscus loads them from its own domain, so they're absolute and the
+      server has to allow it (Access-Control-Allow-Origin).
+    -->
+    {{- $themes := dict -}}
+    {{- range $mode := slice "dark" "light" -}}
+      {{- $accent := index site.Data.default.style (printf "%sAccent" $mode) -}}
+      {{- with site.Params.style -}}
+        {{- with index . (printf "%saccent" $mode) -}}
+          {{- $accent = . -}}
+        {{- end -}}
+      {{- end -}}
+      {{- $css := resources.Get "scss/giscus.scss"
+        | resources.ExecuteAsTemplate (printf "css/giscus-%s.scss" $mode) (dict "mode" $mode "accent" $accent)
+        | css.Sass (dict "targetPath" (printf "css/giscus-%s.css" $mode) "outputStyle" "compressed")
+      -}}
+      {{- $themes = merge $themes (dict $mode $css.Permalink) -}}
+    {{- end -}}
+
+    <section class="card comments req-js">
+      <div class="giscus" id="giscus"
+        data-repo="{{ $g.repo }}"
+        data-repo-id="{{ $g.repoId }}"
+        data-category="{{ $g.category }}"
+        data-category-id="{{ $g.categoryId }}"
+        data-mapping="{{ $g.mapping | default "pathname" }}"
+        {{- with $g.term }} data-term="{{ . }}"{{ end }}
+        data-strict="{{ cond (eq (index $g "strict") true) "1" "0" }}"
+        data-reactions-enabled="{{ cond (eq (index $g "reactionsenabled") false) "0" "1" }}"
+        data-emit-metadata="{{ cond (eq (index $g "emitmetadata") true) "1" "0" }}"
+        data-input-position="{{ $g.inputPosition | default "bottom" }}"
+        data-lang="{{ $g.lang | default site.Language.Lang }}"
+        data-loading="{{ $g.loading | default "lazy" }}"
+        data-theme-dark="{{ $g.darkTheme | default $themes.dark }}"
+        data-theme-light="{{ $g.lightTheme | default $themes.light }}">
+      </div>
+    </section>
+
+  {{- end -}}
+
+{{- end -}}
