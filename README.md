@@ -289,7 +289,9 @@ Without `repo`, `repoId` and `categoryId`, the theme adds nothing to the site.
 
 The theme shows comments on posts, the pages in `mainSections`, in a card under the post. Set `comments: false` in the front matter to hide them on a post, or `comments: true` to show them on any other page.
 
-The theme builds two CSS files from your palette and default accents: `/css/giscus-dark.css` and `/css/giscus-light.css`. They sit on top of giscus's high contrast themes, and the comments switch between them with the mode. The accent a visitor picks doesn't reach the comments, only the defaults do. To change the colors, copy `assets/scss/giscus.scss` to your site, or point `darkTheme` and `lightTheme` to other files.
+The theme builds two CSS files from your palette and default accents: `/css/giscus-dark.css` and `/css/giscus-light.css`. They sit on top of giscus's high contrast themes, and the comments switch between them with the mode. The files take the accent from a CSS variable, `--cyw-accent`. The theme sets it to the visitor's accent, so the comments follow any color they pick, custom ones included.
+
+To change the colors, copy `assets/scss/giscus.scss` to your site and build every accent shade from `--cyw-accent`. Or point `darkTheme` and `lightTheme` to other files. The theme doesn't pass the accent to files of your own.
 
 giscus loads these files from its own domain, so your server has to send an `Access-Control-Allow-Origin` header with them. GitHub Pages sends it by default. On Netlify and Cloudflare Pages, add a `static/_headers` file:
 

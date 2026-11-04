@@ -4,8 +4,8 @@
   Shown on pages of the main sections, unless "comments: false" is set
   in the front matter ("comments: true" shows them on any other page).
 
-  The giscus script is added by main.js, which picks the dark or light
-  theme below and switches it along with the mode.
+  The giscus script is added by main.js, which picks the theme for the
+  current mode and accent color, and switches it when either changes.
 -->
 
 {{- $g := site.Params.giscus -}}
@@ -22,7 +22,8 @@
     <!--
       Themes in the site's colors (assets/scss/giscus.scss), at fixed URLs.
       giscus loads them from its own domain, so they're absolute and the
-      server has to allow it (Access-Control-Allow-Origin).
+      server has to allow it (Access-Control-Allow-Origin). main.js adds
+      the visitor's accent color on top.
     -->
     {{- $themes := dict -}}
     {{- range $mode := slice "dark" "light" -}}

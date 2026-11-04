@@ -185,25 +185,47 @@ document.addEventListener('DOMContentLoaded', function() {
     const giscusOrigin = 'https://giscus.app';
     const giscusBox = document.querySelector('.giscus[data-repo]');
     let giscusScript = null;
+    let giscusCurrent = null;
 
-    // Theme of the current mode: a giscus theme name or a CSS URL.
-    // giscus loads it from its own domain, so a path like "/css/..."
-    // (baseURL = "/") has to become a full URL on this site
+    // Theme of the current mode and accent: a giscus theme name or a CSS URL
     function giscusTheme() {
-      const theme = rootElement.getAttribute('data-mode') === 'dark' ?
+      let theme = rootElement.getAttribute('data-mode') === 'dark' ?
         giscusBox.dataset.themeDark : giscusBox.dataset.themeLight;
 
-      return /^\.{0,2}\//.test(theme) ?
-        new URL(theme, location.href).href : theme;
+      // giscus loads it from its own domain, so a path like "/css/..."
+      // (baseURL = "/") has to become a full URL on this site
+      if (/^\.{0,2}\//.test(theme)) {
+        theme = new URL(theme, location.href).href;
+      }
+
+      // The theme's own files take the accent from --cyw-accent (see
+      // assets/scss/giscus.scss). giscus only takes one stylesheet, so pass
+      // a small one that loads the file and sets the visitor's accent
+      const accent = getAccent();
+
+      if (/\/css\/giscus-(dark|light)\.css$/.test(theme) &&
+          /^#[0-9a-f]{6}$/i.test(accent)) {
+        theme = 'data:text/css;base64,' + btoa('@import url("' + theme +
+          '");main{--cyw-accent:' + accent + '}');
+      }
+
+      return theme;
     }
 
-    // Switch the comments' theme along with the mode
+    // Switch the comments' theme along with the mode and accent color
     function updateComments() {
       if (!giscusScript) {
         return;
       }
 
       const theme = giscusTheme();
+
+      if (theme === giscusCurrent) {
+        return;
+      }
+
+      giscusCurrent = theme;
+
       const frame = giscusBox.querySelector('iframe.giscus-frame');
 
       if (!frame) {
@@ -225,7 +247,8 @@ document.addEventListener('DOMContentLoaded', function() {
       Object.assign(giscusScript.dataset, giscusBox.dataset);
       delete giscusScript.dataset.themeDark;
       delete giscusScript.dataset.themeLight;
-      giscusScript.dataset.theme = giscusTheme();
+      giscusCurrent = giscusTheme();
+      giscusScript.dataset.theme = giscusCurrent;
 
       giscusScript.src = giscusOrigin + '/client.js';
       giscusScript.crossOrigin = 'anonymous';
@@ -255,6 +278,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     customInput.value = accent;
+
+    {{ if $giscus }}
+      updateComments();
+    {{ end }}
   }
 
   function saveAccent(color) {
@@ -369,10 +396,6 @@ document.addEventListener('DOMContentLoaded', function() {
       storage.set('mode', 'light');
     }
 
-    {{ if $giscus }}
-      updateComments();
-    {{ end }}
-
     {{ if hugo.IsDevelopment }}
       console.log('Local: ' +
       capitalize(storage.get('mode') + ' mode set.'));
@@ -410,10 +433,6 @@ document.addEventListener('DOMContentLoaded', function() {
       } else {
         setLight();
       }
-
-      {{ if $giscus }}
-        updateComments();
-      {{ end }}
 
       {{ if hugo.IsDevelopment }}
         console.log('System: ' +
