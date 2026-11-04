@@ -1,6 +1,6 @@
 ---
 name: release
-description: Release a new version of the Color Your World Hugo theme. Commits what's pending, builds a test site, checks translations and the README, makes a signed tag on master, pushes it, writes release notes and publishes the GitHub release. Use when the user asks to release, ship, or "ship it as usual".
+description: Release a new version of the Color Your World Hugo theme. Commits what's pending, runs the tests, checks translations and the README, makes a signed tag on master, pushes it, writes release notes and publishes the GitHub release. Use when the user asks to release, ship, or "ship it as usual".
 argument-hint: '[version, e.g. 2.1.0; picked from the commits if left out]'
 disable-model-invocation: true
 ---
@@ -13,7 +13,7 @@ commits or tags, no skipping hooks, and no IPs or secrets in the release notes.
 
 If a step fails, stop and tell the user. Don't work around it.
 
-The theme has no build output and no CI. Sites pull it in as a Git submodule or a clone, so a
+The theme has no build output. Sites pull it in as a Git submodule or a clone, so a
 release is a signed tag on `master` and release notes on GitHub. No file holds the version,
 only the tag does, so there's no release commit.
 
@@ -37,20 +37,23 @@ only the tag does, so there's no release commit.
   signatures. If an unsigned commit is already pushed, stop and ask.
 - **Hugo.** `hugo version` must say Extended, and must be at least the `min` under
   `[module.hugoVersion]` in `config.toml`.
-- **Test site.** Build the test site from this skill's folder:
+- **Tests.** Run the theme's tests:
   ```bash
-  .claude/skills/release/smoke.sh <scratchpad>/smoke
+  go -C tests test -count=1 -v ./...
   ```
-  The folder must be empty or missing. Every check must pass, and no build may print `WARN`
-  or `ERROR` lines. The site turns on most features, comes in English and Ukrainian, and has
-  no network, so YouTube has to fall back to its placeholder. The script builds it three
-  times: as is, with giscus set for Ukrainian only, and with `baseURL = "/"`. The last one
-  needs Chromium. Without it, that check says `skip`, and you mention it in the report. If a
-  commit since the last tag adds a feature the test site doesn't use, add it to `smoke-site/`
-  and add a check to `smoke.sh`, in a `chore(skills): ...` commit.
+  Every test must pass. A build that prints `WARN` or `ERROR` lines fails too. The test site
+  in `tests/testdata/site/` turns on most features, comes in English and Ukrainian, and has
+  no network, so YouTube has to fall back to its placeholder. The tests build it three
+  times: with giscus for all languages, with giscus for Ukrainian only, and with
+  `baseURL = "/"`. The browser check needs Chromium. Without it, `go test` shows
+  `--- SKIP: TestRootBaseURL/in_the_browser`, and you mention it in the report. If a test
+  fails, the output says where the built sites are. If a commit since the last tag adds a
+  feature the test site doesn't use, add it to the test site and add a test, in a
+  `test: ...` commit.
 - **Tested Hugo version.** The Requirements section of `README.md` says which Hugo version the
-  theme was tested up to. If yours is newer and the test site passed, update that line in a
-  `docs(readme): ...` commit.
+  theme was tested up to. If yours is newer and the tests passed, update that line and the
+  newer Hugo in the matrix of `.github/workflows/tests.yml`, in a `docs(readme): ...` commit.
+  If the minimum Hugo changes, update the older Hugo in the matrix too.
 - **Minimum Hugo version.** If a commit since the last tag uses a Hugo function, method or
   setting for the first time, check Hugo's docs to see if the minimum version has it. If it
   doesn't, or you can't tell, ask the user. They can raise the minimum, which breaks sites and
@@ -107,8 +110,16 @@ git push origin master
 git push origin vX.Y.Z
 ```
 
-If either push gets rejected, stop and ask. Never force-push. There's no CI, so nothing runs
-after the push.
+If either push gets rejected, stop and ask. Never force-push.
+
+The push to `master` starts the Tests workflow in `.github/workflows/tests.yml`. It runs the
+tests with the minimum Hugo and the tested Hugo. Wait for it before the GitHub release:
+
+```bash
+gh run watch --exit-status "$(gh run list --workflow tests.yml --branch master --limit 1 --json databaseId --jq '.[0].databaseId')"
+```
+
+If it fails, stop and tell the user, with the failing step from `gh run view --log-failed`.
 
 ## 5. Release notes
 
@@ -167,10 +178,10 @@ Keep it short:
 
 - the version, and that the tag signature is Good
 - the commits in the release
-- that pre-commit and the test site passed, and which Hugo version built it
+- that pre-commit, the tests and the Tests workflow passed, and which Hugo versions ran them
 - the release link, or the release notes in one fenced `markdown` block if the user publishes
   them
-- what's left over, like the test site in the scratchpad, and any check you skipped
+- what's left over, and any test that was skipped
 - last, the commands that update the user's site to the new version, ready to paste:
   ```bash
   git submodule update --remote themes/color-your-world
