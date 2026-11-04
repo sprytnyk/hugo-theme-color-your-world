@@ -141,10 +141,17 @@ if [[ -n $browser ]]; then
     --virtual-time-budget=5000 --dump-dom \
     "http://127.0.0.1:$port/posts/sample/" >"$out/root.dom" 2>/dev/null || true
 
+  # giscus gets a small stylesheet that loads the theme file and sets the
+  # accent, as a base64 data: URL
+  theme=$(grep -o 'data-theme="data:text/css;base64,[^"]*"' "$out/root.dom" |
+    sed 's/.*base64,//; s/"$//' | base64 -d 2>/dev/null || true)
+
   check "baseURL /: theme path stays a path in the page" \
     grep -Eq 'data-theme-dark="?/css/giscus-dark.css' "$out/root/posts/sample/index.html"
   check "baseURL /: giscus gets a full theme URL" \
-    grep -q "data-theme=\"http://127.0.0.1:$port/css/giscus-" "$out/root.dom"
+    grep -q "@import url(\"http://127.0.0.1:$port/css/giscus-" <<<"$theme"
+  check "giscus gets the accent color" \
+    grep -Eq 'main\{--cyw-accent:#[0-9a-f]{6}\}' <<<"$theme"
 else
   echo "skip  baseURL /: no Chromium found"
 fi
