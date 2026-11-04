@@ -171,3 +171,11 @@ Keep it short:
 - the release link, or the release notes in one fenced `markdown` block if the user publishes
   them
 - what's left over, like the test site in the scratchpad, and any check you skipped
+- last, the commands that update the user's site to the new version, ready to paste:
+  ```bash
+  git submodule update --remote themes/color-your-world
+  git -C themes/color-your-world describe --tags   # should print vX.Y.Z
+  git add themes/color-your-world
+  git commit -S -m "chore(theme): update to vX.Y.Z"
+  git push
+  ```
