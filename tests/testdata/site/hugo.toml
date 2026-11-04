@@ -1,6 +1,6 @@
-# Test site for the release skill. smoke.sh copies it to a scratch folder,
-# links the theme in and builds it. It turns on most of the theme's features.
-# The giscus settings are in ../giscus.toml, which smoke.sh adds.
+# Test site for the theme's tests. The tests copy it to a temp folder, link
+# the theme in, add their own settings at the end and build it. It uses most
+# of the theme's features. The tests add the giscus settings.
 
 baseURL                = "https://example.org/"
 title                  = "Smoke test"
@@ -30,7 +30,7 @@ copyright              = "Copyright © 2026, Jane Doe"
   weight       = 2
 
 [params]
-  description       = "Test site for the release skill"
+  description       = "Test site for the theme's tests"
   author            = "Jane Doe"
   authorDesc        = "Software Engineer"
   footerText        = ["Built with [Hugo](https://gohugo.io)."]

@@ -645,6 +645,16 @@ To work on the theme, point any Hugo site at your copy:
 hugo server --themesDir /path/to/parent/folder --theme hugo-theme-color-your-world
 ```
 
+### Testing
+
+The tests build a site that uses most of the theme's features, then check the HTML it makes:
+
+```bash
+go -C tests test -count=1 ./...
+```
+
+They need Go and Hugo Extended. One test opens the site in headless Chromium, and is skipped without it. A build that prints a warning fails the tests.
+
 ## Credits
 
 * [Raphael Aguiar](https://gitlab.com/rmaguiar), who made the original [Color Your World](https://gitlab.com/rmaguiar/hugo-theme-color-your-world). If it's useful to you, consider [buying Raphael a coffee](https://ko-fi.com/rmaguiar);
