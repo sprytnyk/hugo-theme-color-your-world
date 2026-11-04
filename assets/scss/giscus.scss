@@ -68,3 +68,13 @@ main {
   --color-social-reaction-bg-hover: #{$row-hover};
   --color-social-reaction-bg-reacted-hover: color-mix(in srgb, var(--cyw-accent) 25%, transparent);
 }
+
+// Twice the height of giscus's comment box (100px). The preview tab
+// grows with it, so switching tabs doesn't jump
+main .gsc-comment-box-textarea {
+  min-height: 200px;
+}
+
+main .gsc-comment-box-preview {
+  min-height: 231px;
+}
