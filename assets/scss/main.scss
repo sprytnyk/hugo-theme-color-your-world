@@ -956,6 +956,35 @@ sup {
   margin-top: 1.5rem;
 }
 
+// giscus keeps 150px for its frame until it loads, then jumps to the real
+// height. Keep the height of an empty thread instead, with the 200px comment
+// box from giscus.scss, and slide to the real height once giscus sends it.
+// Measured on giscus.app in November 2026
+$giscus-height: 453px;
+$giscus-height-wide: 472px;
+
+// Before main.js adds the frame
+.comments .giscus:not(:has(.giscus-frame)) {
+  min-height: $giscus-height;
+}
+
+// display: block drops the gap under the frame that inline frames get
+.comments .giscus-frame {
+  display: block;
+  height: $giscus-height;
+  transition: height .3s ease;
+}
+
+@include respond-above($mobile-breakpoint) {
+  .comments .giscus:not(:has(.giscus-frame)) {
+    min-height: $giscus-height-wide;
+  }
+
+  .comments .giscus-frame {
+    height: $giscus-height-wide;
+  }
+}
+
 
 
 // MEDIA

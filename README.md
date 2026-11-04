@@ -314,7 +314,7 @@ On other hosts, look up how to add a response header in their docs. For `hugo se
 
 Without the header, the browser blocks the files.
 
-giscus loads only when the visitor scrolls near the comments. Set `loading = "eager"` to load it with the page. Without JavaScript there are no comments. Loading giscus connects the visitor's browser to giscus.app.
+giscus loads only when the visitor scrolls near the comments. Set `loading = "eager"` to load it with the page. Until it loads, the card keeps the height of an empty thread, so the page doesn't jump. Without JavaScript there are no comments. Loading giscus connects the visitor's browser to giscus.app.
 
 All the options, with their defaults:
 
