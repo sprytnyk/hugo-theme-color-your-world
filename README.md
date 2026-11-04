@@ -274,6 +274,8 @@ Pagefind indexes posts and pages, not lists. It skips pages with `sitemapExclude
 
 Comments use [giscus](https://giscus.app/), which stores them in your repo's GitHub Discussions. Visitors sign in with GitHub to comment.
 
+![Comments in dark and light modes.](images/comments.png)
+
 1. Make the repo public, enable Discussions and install the [giscus app](https://github.com/apps/giscus) on it.
 2. Fill in the repo and category on [giscus.app](https://giscus.app/), and copy `data-repo-id` and `data-category-id` from the snippet it makes.
 3. Add them to your config:
