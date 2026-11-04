@@ -4,7 +4,7 @@
 [![License](https://badgen.net/badge/license/MIT/blue)](LICENSE)
 [![Tests](https://github.com/sprytnyk/hugo-theme-color-your-world/actions/workflows/tests.yml/badge.svg)](https://github.com/sprytnyk/hugo-theme-color-your-world/actions/workflows/tests.yml)
 
-A minimal, privacy-aware [Hugo](https://gohugo.io/) theme for personal sites and technical blogs. It has slate dark and light modes, puts content on rounded cards, and lets visitors pick their own accent color.
+A [Hugo](https://gohugo.io/) theme for personal sites and technical blogs. It has dark and light modes in slate colors, puts content on rounded cards, and lets visitors pick their own accent color. It has no analytics and loads no web fonts.
 
 This is a fork of [Color Your World](https://gitlab.com/rmaguiar/hugo-theme-color-your-world) by Raphael Aguiar, with a new design, bug fixes and video support. If you're switching from the original, see [Upgrading from the original theme](#upgrading-from-the-original-theme).
 
@@ -40,12 +40,13 @@ This is a fork of [Color Your World](https://gitlab.com/rmaguiar/hugo-theme-colo
 * YouTube embeds that load nothing from YouTube until the visitor presses play;
 * Search via [Pagefind](https://pagefind.app/);
 * Optional comments via [giscus](https://giscus.app/), stored in GitHub Discussions and drawn in the site's colors;
-* Responsive images, resized and converted to WebP at build time, and lazy loading;
+* Images resized to several widths and converted to WebP at build time, and loaded lazily;
 * Math via [KaTeX](https://katex.org/);
 * Social links for centralized and decentralized platforms, and a contact form via [Formspree](https://formspree.io/);
 * Open Graph, Twitter Cards and Schema.org meta tags, plus `rel="me"` links;
 * Multilingual sites, with English, German, Portuguese and Ukrainian translations;
-* Keyboard friendly. Everything works without JavaScript except search, comments, KaTeX and the color picker;
+* Visible focus outlines for keyboard users;
+* Everything works without JavaScript except search, comments, KaTeX and the color picker;
 * No Google Analytics, Google Fonts or Disqus.
 
 ## Requirements
@@ -290,9 +291,9 @@ Comments use [giscus](https://giscus.app/), which stores them in your repo's Git
 
 Without `repo`, `repoId` and `categoryId`, the theme adds nothing to the site.
 
-The theme shows comments on posts, the pages in `mainSections`, in a card under the post. Set `comments: false` in the front matter to hide them on a post, or `comments: true` to show them on any other page.
+The theme shows comments in a card under each post. Posts are the pages in `mainSections`. Set `comments: false` in the front matter to hide them on a post, or `comments: true` to show them on any other page.
 
-The theme builds two CSS files from your palette and default accents: `/css/giscus-dark.css` and `/css/giscus-light.css`. They sit on top of giscus's high contrast themes, and the comments switch between them with the mode. The files take the accent from a CSS variable, `--cyw-accent`. The theme sets it to the visitor's accent, so the comments follow any color they pick, custom ones included.
+The theme builds two CSS files from your palette and default accents: `/css/giscus-dark.css` and `/css/giscus-light.css`. They build on giscus's high contrast themes, and the comments switch between them with the mode. The files take the accent from a CSS variable, `--cyw-accent`. The theme sets it to the visitor's accent, so the comments follow any color they pick, custom ones included.
 
 To change the colors, copy `assets/scss/giscus.scss` to your site and build every accent shade from `--cyw-accent`. Or point `darkTheme` and `lightTheme` to other files. The theme doesn't pass the accent to files of your own.
 
@@ -365,7 +366,7 @@ All the options, with their defaults:
 
 ### YouTube
 
-The theme replaces Hugo's built-in `youtube` shortcode with a lighter embed. It shows the video's thumbnail and title with a play button, and loads the player only on click. Without JavaScript, it's a link to the video.
+The theme replaces Hugo's built-in `youtube` shortcode. It shows the video's thumbnail and title with a play button, and loads the player only on click. Without JavaScript, it's a link to the video.
 
 ```markdown
 {{</* youtube "dQw4w9WgXcQ" */>}}
@@ -394,7 +395,7 @@ The shortcode follows Hugo's `privacy.youtube` config:
 
 ### Social
 
-Shows links to your profiles as a grid of cards. The `rel="me"` links and Schema.org data use the same profiles.
+`social` shows links to your profiles as a grid of cards. The `rel="me"` links and Schema.org data use the same profiles.
 
 ```markdown
 {{</* social */>}}
@@ -431,7 +432,7 @@ Centralized platforms take a username and an optional label. Decentralized ones,
 
 ### Contact form
 
-A contact form that sends messages through [Formspree](https://formspree.io/):
+`contact-form` adds a form that sends messages through [Formspree](https://formspree.io/):
 
 ```markdown
 {{</* contact-form */>}}
