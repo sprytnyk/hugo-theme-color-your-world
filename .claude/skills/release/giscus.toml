@@ -1,8 +1,0 @@
-
-# Added to the test site's hugo.toml by smoke.sh. One copy of the site gets
-# it as is, another only for the Ukrainian language.
-[params.giscus]
-  repo       = "owner/repo"
-  repoId     = "R_test"
-  category   = "Announcements"
-  categoryId = "DIC_test"
