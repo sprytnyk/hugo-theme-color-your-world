@@ -52,8 +52,9 @@ main {
   --color-btn-primary-hover-bg: #{mix($accent, $fg, 85%)};
   --color-btn-primary-hover-border: transparent;
   --color-btn-primary-selected-bg: #{$accent};
-  --color-btn-primary-disabled-text: #{$on-accent};
-  --color-btn-primary-disabled-bg: #{rgba($accent, .5)};
+  // Gray when disabled: accent at 50% left the text below 3:1 contrast
+  --color-btn-primary-disabled-text: #{$fg};
+  --color-btn-primary-disabled-bg: #{$row-hover};
   --color-btn-primary-disabled-border: transparent;
 
   --color-segmented-control-button-bg: #{$card};
