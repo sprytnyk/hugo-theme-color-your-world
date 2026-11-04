@@ -1,0 +1,51 @@
+# Builds the test site in tests/ and checks the output, with the oldest Hugo
+# the theme supports and the newest it's tested with
+
+name: Tests
+
+# Every push to any branch, and every pull request. Tags don't start a run
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Hugo ${{ matrix.hugo }}
+    runs-on: ubuntu-24.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # The minimum in config.toml, and the version in the README's Requirements
+        hugo: ["0.141.0", "0.152.2"]
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: tests/go.mod
+          cache: false
+
+      - name: Install Hugo Extended
+        env:
+          HUGO: ${{ matrix.hugo }}
+        run: |
+          base=https://github.com/gohugoio/hugo/releases/download/v$HUGO
+          deb=hugo_extended_${HUGO}_linux-amd64.deb
+          curl -fsSLO "$base/$deb"
+          curl -fsSL "$base/hugo_${HUGO}_checksums.txt" | grep " $deb\$" | sha256sum -c
+          sudo dpkg -i "$deb"
+          hugo version
+
+      # Ubuntu 24.04 blocks the sandbox Chrome needs. The browser test uses
+      # the Chrome that comes with the runner
+      - name: Let Chrome start its sandbox
+        run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+
+      - name: Run the tests
+        run: go -C tests test -count=1 -v ./...

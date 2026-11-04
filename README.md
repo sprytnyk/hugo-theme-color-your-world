@@ -2,6 +2,7 @@
 
 [![Hugo](https://img.shields.io/badge/Hugo%20Extended-%E2%89%A50.141.0-ff4088?logo=hugo)](https://gohugo.io/)
 [![License](https://badgen.net/badge/license/MIT/blue)](LICENSE)
+[![Tests](https://github.com/sprytnyk/hugo-theme-color-your-world/actions/workflows/tests.yml/badge.svg)](https://github.com/sprytnyk/hugo-theme-color-your-world/actions/workflows/tests.yml)
 
 A minimal, privacy-aware [Hugo](https://gohugo.io/) theme for personal sites and technical blogs. It has slate dark and light modes, puts content on rounded cards, and lets visitors pick their own accent color.
 
@@ -654,6 +655,8 @@ go -C tests test -count=1 ./...
 ```
 
 They need Go and Hugo Extended. One test opens the site in headless Chromium, and is skipped without it. A build that prints a warning fails the tests.
+
+GitHub runs them on every push and every pull request, with the oldest Hugo the theme supports and the newest it's tested with.
 
 ## Credits
 
