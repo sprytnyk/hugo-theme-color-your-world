@@ -1,6 +1,6 @@
 ---
 name: release
-description: Release a new version of the Color Your World Hugo theme. Commits what's pending, runs the tests, checks translations and the README, makes a signed tag on master, pushes it, writes release notes and publishes the GitHub release. Use when the user asks to release, ship, or "ship it as usual".
+description: Release a new version of the Color Your World Hugo theme. Commits what's pending, runs the tests, checks translations and the README, makes a signed release commit and tag on master, pushes them, writes release notes and publishes the GitHub release. Use when the user asks to release, ship, or "ship it as usual".
 argument-hint: '[version, e.g. 2.1.0; picked from the commits if left out]'
 disable-model-invocation: true
 ---
@@ -14,8 +14,8 @@ commits or tags, no skipping hooks, and no IPs or secrets in the release notes.
 If a step fails, stop and tell the user. Don't work around it.
 
 The theme has no build output. Sites pull it in as a Git submodule or a clone, so a
-release is a signed tag on `master` and release notes on GitHub. No file holds the version,
-only the tag does, so there's no release commit.
+release is an empty signed commit on `master`, a signed tag on it, and release notes on
+GitHub. No file holds the version, only the tag does.
 
 `gh` is installed and logged in. Use it to publish the release.
 
@@ -88,19 +88,21 @@ only the tag does, so there's no release commit.
   `!`, say so and ask before you pick the version.
 - `git status --porcelain --untracked-files=no` must print nothing.
 
-## 3. Signed tag
+## 3. Release commit and signed tag
 
-Put the tag on the latest commit of `master`. It's annotated and signed. The message is the
-version, a blank line, and a short summary of the release in plain words, wrapped at 72
-columns. `git cat-file -p v2.0.0` shows an example. Write the message to a file in the
-scratchpad:
+Make an empty signed commit on `master`'s HEAD and put the tag on it. The tag is annotated
+and signed. Its message is the version, a blank line, and a short summary of the release
+in plain words, wrapped at 72 columns. `git cat-file -p v2.0.0` shows an example. Write the
+message to a file in the scratchpad, then run:
 
 ```bash
+git commit --allow-empty -S -m "chore(release): X.Y.Z"
 git tag -s vX.Y.Z -F <scratchpad>/tag-message
-git tag -v vX.Y.Z
+git verify-commit HEAD && git tag -v vX.Y.Z
 ```
 
-The signature must be Good, from `0xC00C0F0D647BD3C6`. If gpg times out waiting for the
+The commit message is just `chore(release): X.Y.Z`, with no body and no trailers. Both
+signatures must be Good, from `0xC00C0F0D647BD3C6`. If gpg times out waiting for the
 passphrase, ask the user to run the command themselves with a `!` in front.
 
 ## 4. Push
