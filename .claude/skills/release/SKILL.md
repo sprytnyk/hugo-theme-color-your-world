@@ -137,7 +137,7 @@ One-line summary of the release.
 ### Breaking
 - What changed, why, and what sites have to change: params, overridden files or Hugo version.
 
-### Highlights
+### Features
 - New features, the ones site owners notice first.
 
 ### Fixes
