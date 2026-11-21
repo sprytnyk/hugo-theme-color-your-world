@@ -25,6 +25,10 @@ $row-hover:  ${{ .mode }}-row-hover;
 $error:      ${{ .mode }}-error-color;
 $on-accent:  ${{ .mode }}-on-accent;
 $input-bg:   ${{ .mode }}-input-background;
+$border-strong: ${{ .mode }}-border-strong;
+$highlight:  ${{ .mode }}-highlight;
+$segment:    ${{ .mode }}-segment;
+$segment-on: ${{ .mode }}-segment-on;
 
 main {
   --cyw-accent: #{$accent};
@@ -82,4 +86,141 @@ main .gsc-comment-box-textarea {
 
 main .gsc-comment-box-preview {
   min-height: 231px;
+}
+
+
+
+// The site's look, like the buttons, fields and menu outside the comments.
+// "main" in front of each rule wins over giscus's own classes, such as
+// "rounded-md" on its buttons
+
+// Buttons
+main .btn {
+  padding: 6px 14px;
+
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, .08), #{$highlight};
+
+  font-weight: 600;
+}
+
+// Filled accent buttons with a light top edge and a glow, like the
+// site's search and send buttons
+main .btn-primary {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--cyw-accent) 82%, #fff), var(--cyw-accent));
+  border-color: transparent;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, .15),
+    0 4px 12px -4px color-mix(in srgb, var(--cyw-accent) 45%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, .2);
+
+  transition: filter .15s ease;
+}
+
+main .btn-primary:hover {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--cyw-accent) 82%, #fff), var(--cyw-accent));
+  filter: brightness(1.08);
+}
+
+main .btn-primary:disabled {
+  background: #{$row-hover};
+  box-shadow: none;
+  filter: none;
+}
+
+// Oldest and newest, as a pill switch like the site's menu
+main .BtnGroup {
+  gap: 2px;
+  padding: 3px;
+
+  background: #{$segment};
+  border: 1px solid #{$border};
+  border-radius: 12px;
+}
+
+main .BtnGroup-item {
+  border: 0;
+  border-radius: 9px;
+}
+
+main .BtnGroup-item.BtnGroup-item--selected {
+  background: #{$segment-on};
+  box-shadow: 0 1px 2px rgba(15, 23, 42, .12), #{$highlight};
+}
+
+main .BtnGroup-item .btn {
+  box-shadow: none;
+}
+
+// Comment box
+main .gsc-comment-box:not(.gsc-comment-box-is-reply) {
+  border-radius: 14px;
+  box-shadow: #{$highlight};
+}
+
+main .gsc-comment-box-tabs {
+  border-radius: 13px 13px 0 0;
+}
+
+main .gsc-comment .gsc-comment-box-tabs {
+  border-radius: 0;
+}
+
+// Write and preview, as a pill switch
+main .gsc-comment-box-tabs > div:first-child {
+  display: inline-flex;
+  gap: 2px;
+
+  margin: 8px;
+  padding: 3px;
+
+  background: #{$segment};
+  border: 1px solid #{$border};
+  border-radius: 12px;
+}
+
+main .gsc-comment-box-tabs > div:first-child button {
+  margin: 0;
+  padding: 4px 14px;
+
+  border: 0;
+  border-radius: 9px;
+
+  font-weight: 600;
+}
+
+// The selected tab
+main .gsc-comment-box-tabs > div:first-child button.color-bg-canvas {
+  background: #{$segment-on};
+  box-shadow: 0 1px 2px rgba(15, 23, 42, .12), #{$highlight};
+}
+
+// The text box, with a soft accent ring like the site's fields
+main .gsc-comment-box-write {
+  border-radius: 10px;
+}
+
+main .gsc-comment-box-write:focus-within {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--cyw-accent) 25%, transparent);
+}
+
+main .gsc-comment-box-textarea {
+  border-radius: 10px 10px 0 0;
+}
+
+main .gsc-comment-box-textarea-extras {
+  border-radius: 0 0 10px 10px;
+}
+
+// Comments and replies
+main .gsc-comment > div {
+  border-radius: 14px;
+}
+
+main .gsc-reply-box {
+  border-radius: 0 0 13px 13px;
+}
+
+main .gsc-reply-box .form-control {
+  border-radius: 10px;
 }
