@@ -1,7 +1,7 @@
 // Border radii
-$radius-sm:   .5rem;
-$radius:      .75rem;
-$radius-lg:   1.5rem;
+$radius-sm:   .625rem;
+$radius:      .875rem;
+$radius-lg:   1.25rem;
 $radius-full: 9999px;
 
 // Kept for custom stylesheets
@@ -15,3 +15,6 @@ $content-width: 56rem;
 
 // Max height for items like images, code fences, etc
 $box-max-height: 75vh;
+
+// Easing for things that slide in: fast start, soft landing
+$ease-out: cubic-bezier(.2, .7, .2, 1);

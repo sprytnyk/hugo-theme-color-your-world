@@ -3,7 +3,8 @@
 // Import base (variables and mixins), typography and general colors
 @import 'base/_all',
         'fonts/_all',
-        'colors/variables';
+        'colors/variables',
+        'defaults';
 
 
 // Get transition for color changes
@@ -21,6 +22,12 @@ html {
   font-size: $font-size;
   scroll-behavior: smooth;
 
+  scrollbar-color: var(--bd-strong) transparent;
+
+  // Anything a link jumps to (headings, footnotes) stops below the sticky
+  // header. Phones have no sticky header, see RESPONSIVENESS
+  scroll-padding-top: 5rem;
+
   // Dark mode
   &[data-mode='dark'] {
     color-scheme: dark;
@@ -32,7 +39,9 @@ html {
     --muted: #{$dark-muted};
 
     --card: #{$dark-card};
+    --surface: #{$dark-surface};
     --bd: #{$dark-border};
+    --bd-strong: #{$dark-border-strong};
     --row: #{$dark-row};
     --row-hover: #{$dark-row-hover};
 
@@ -44,6 +53,13 @@ html {
     --input-bd: #{$dark-input-border};
 
     --shadow: #{$dark-shadow};
+    --highlight: #{$dark-highlight};
+
+    --header: #{$dark-header};
+    --dots: #{$dark-dots};
+    --glow: #{tint(18%)};
+    --segment: #{$dark-segment};
+    --segment-on: #{$dark-segment-on};
 
     // Lazy way to deter images that can be too bright
     img:not([src$='.svg']) {
@@ -73,7 +89,9 @@ html {
     --muted: #{$light-muted};
 
     --card: #{$light-card};
+    --surface: #{$light-surface};
     --bd: #{$light-border};
+    --bd-strong: #{$light-border-strong};
     --row: #{$light-row};
     --row-hover: #{$light-row-hover};
 
@@ -85,6 +103,13 @@ html {
     --input-bd: #{$light-input-border};
 
     --shadow: #{$light-shadow};
+    --highlight: #{$light-highlight};
+
+    --header: #{$light-header};
+    --dots: #{$light-dots};
+    --glow: #{tint(12%)};
+    --segment: #{$light-segment};
+    --segment-on: #{$light-segment-on};
 
     // Custom Chroma stylesheet
     {{ if .Site.Params.Style.useCustomChroma | default true }}
@@ -117,15 +142,33 @@ body {
   min-height: 100vh;
   flex-direction: column;
 
-  background-color: var(--bg);
-  background-image: linear-gradient(to bottom right, var(--bg), var(--bg-alt), var(--bg));
-  background-attachment: fixed;
+  // A soft glow in the accent color at the top of the page
+  background:
+    radial-gradient(70rem 32rem at 50% -12rem, var(--glow), transparent 70%) no-repeat,
+    var(--bg);
   color: var(--fg);
 
   font-family: $body-font;
+  font-feature-settings: 'cv11', 'ss01'; // Only change Inter
   line-height: $body-line-height;
 
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  // A faint dot grid that fades out down the page
+  &::before {
+    content: '';
+
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+
+    background: radial-gradient(var(--dots) 1px, transparent 1px) 0 0 / 22px 22px;
+    -webkit-mask-image: radial-gradient(ellipse 80% 50% at 50% 0, #000, transparent);
+    mask-image: radial-gradient(ellipse 80% 50% at 50% 0, #000, transparent);
+
+    pointer-events: none;
+  }
 }
 
 a {
@@ -177,8 +220,8 @@ hr {
 }
 
 ::selection {
-  background: var(--accent);
-  color: var(--on-accent);
+  background: tint(35%);
+  color: var(--heading);
   text-shadow: none;
 }
 
@@ -201,10 +244,10 @@ h1, h2, h3, h4, h5, h6 {
   @extend %heading-base;
 
   line-height: 1.25;
-  letter-spacing: -.01em;
+  letter-spacing: -.02em;
 }
 
-h1 { font-size: 2.25rem; line-height: 1.1; }
+h1 { font-size: 2.25rem; line-height: 1.1; letter-spacing: -.035em; }
 h2 { font-size: 1.5rem; }
 h3 { font-size: 1.25rem; font-weight: $body-bold-weight; }
 h4 { font-size: 1.125rem; font-weight: $body-bold-weight; }
@@ -236,57 +279,82 @@ code {
 
 
 // HEADER
+// A see-through bar that stays at the top. Its content lines up with the
+// cards below it
 body > header {
-  max-width: $content-width;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .75rem 1rem;
+
   width: 100%;
+  // unquote: LibSass reads max() as its own function
+  padding: .75rem unquote('max(1rem, calc((100% - #{$content-width}) / 2 + 1rem))');
 
-  margin: 0 auto;
-  padding: 3rem 1rem 0;
+  background: var(--header);
+  border-bottom: 1px solid var(--bd);
 
-  text-align: center;
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+  backdrop-filter: saturate(180%) blur(14px);
 
+  transition:
+    background-color $change-transition,
+    border-color $change-transition;
+
+  // The site title, pushing the menu and buttons to the right
+  > :first-child {
+    margin-right: auto;
+  }
+
+  // The menu, as a pill switch
   nav {
-    margin: 1.5rem 0 0;
+    min-width: 0;
 
     ul {
-      margin: 0;
-      padding: 0;
-
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: .5rem;
+      gap: 2px;
+
+      width: fit-content;
+      max-width: 100%;
+      margin: 0;
+      padding: 3px;
+      overflow-x: auto;
+      scrollbar-width: none;
+
+      background: var(--segment);
+      border: 1px solid var(--bd);
+      border-radius: .75rem;
     }
 
     a {
       display: block;
 
-      padding: .375rem 1rem;
+      padding: .25rem .875rem;
 
-      background: var(--row);
-      border: 1px solid var(--bd);
-      border-radius: $radius-full;
-      color: var(--fg);
+      border-radius: .5625rem;
+      color: var(--muted);
 
       font-size: .875rem;
-      font-weight: 500;
+      font-weight: 600;
       white-space: nowrap;
 
       transition:
         background-color .15s ease,
-        border-color .15s ease,
         color .15s ease;
 
       &:hover {
-        background: var(--row-hover);
         color: var(--heading);
         opacity: 1;
       }
 
       &[aria-current] {
-        background: tint(15%);
-        border-color: tint(40%);
-        color: var(--accent);
+        background: var(--segment-on);
+        box-shadow: 0 1px 2px rgba(15, 23, 42, .12), var(--highlight);
+        color: var(--heading);
       }
     }
   }
@@ -299,12 +367,12 @@ body > header {
 
     display: inline-block;
 
-    font-size: 2.25rem;
-    line-height: 1.1;
-    letter-spacing: -.02em;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    letter-spacing: -.04em;
 
     &:hover {
-      opacity: .85;
+      opacity: .8;
     }
   }
 {{ end }}
@@ -317,9 +385,9 @@ main {
   width: 100%;
 
   margin: 0 auto;
-  padding: 2.5rem 1rem 4rem;
+  padding: 3rem 1rem 4rem;
 
-  animation: fade-in .5s ease-out;
+  animation: fade-in .5s $ease-out backwards;
 
   > h1 {
     margin: 0 0 1.5rem;
@@ -330,15 +398,34 @@ main {
   }
 }
 
-// Card holding the page content
+// Page titles fade from the heading color into the accent
+main > h1,
+article > header h1 {
+  display: inline-block;
+
+  padding-bottom: .08em; // Room for descenders
+
+  background: linear-gradient(100deg, var(--heading) 35%, var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+
+  font-size: clamp(2rem, 4.4vw, 2.75rem);
+  font-weight: 750;
+}
+
+// Card holding the page content, see-through over the page background
 .card,
 main > article {
-  background: var(--card);
+  background: var(--surface);
   border: 1px solid var(--bd);
   border-radius: $radius-lg;
-  box-shadow: var(--shadow);
+  box-shadow: var(--highlight), var(--shadow);
 
   padding: 2rem;
+
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 
   transition:
     background-color $change-transition,
@@ -380,8 +467,8 @@ article {
 
     margin: 2.5rem 0 1rem;
 
-    // Leave room for the header when jumping to an anchor
-    scroll-margin-top: 1.5rem;
+    // A little room above a heading when jumping to it
+    scroll-margin-top: .5rem;
 
     + p {
       margin-top: 0;
@@ -499,7 +586,14 @@ article .terms ul,
 
   li {
     margin: 0;
-    animation: fade-in .5s ease-out;
+    animation: fade-in .5s $ease-out backwards;
+
+    // One after another
+    @for $i from 2 through 10 {
+      &:nth-child(#{$i}) {
+        animation-delay: ($i - 1) * .04s;
+      }
+    }
   }
 
   a,
@@ -510,21 +604,23 @@ article .terms ul,
 
     padding: 1rem 1.25rem;
 
-    background: var(--card);
+    background: var(--surface);
     border: 1px solid var(--bd);
     border-radius: $radius;
-    box-shadow: none;
+    box-shadow: var(--highlight), var(--shadow);
     color: var(--heading);
 
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+
     transition:
-      background-color .15s ease,
       border-color .15s ease,
       transform .15s ease;
 
     &:hover {
-      background: var(--row-hover);
       border-color: tint(50%);
       opacity: 1;
+      transform: translateY(-1px);
     }
 
     p {
@@ -579,6 +675,34 @@ input[type=submit] {
   &:hover {
     background: tint(25%);
     opacity: 1;
+  }
+}
+
+// Filled buttons for the main actions, with a light top edge and a glow
+$btn-primary-bg: linear-gradient(180deg, color-mix(in srgb, var(--accent) 82%, #fff), var(--accent));
+
+%btn-primary {
+  background: $btn-primary-bg;
+  border: 1px solid transparent;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, .15),
+    0 4px 12px -4px tint(45%),
+    inset 0 1px 0 rgba(255, 255, 255, .2);
+  color: var(--on-accent);
+
+  transition:
+    filter .15s ease,
+    transform .05s ease;
+
+  // Restated, so the hover background of ".btn" doesn't replace it
+  &:hover {
+    background: $btn-primary-bg;
+    filter: brightness(1.08);
+    opacity: 1;
+  }
+
+  &:active {
+    transform: translateY(1px);
   }
 }
 
@@ -680,10 +804,9 @@ article > header .terms {
   }
 
   .current p {
-    background: var(--accent);
-    border: 1px solid var(--accent);
+    @extend %btn-primary;
+
     border-radius: $radius-sm;
-    color: var(--on-accent);
 
     user-select: none;
   }
@@ -709,6 +832,7 @@ article > header .terms {
   background: var(--row);
   border: 1px solid var(--bd);
   border-radius: $radius;
+  box-shadow: var(--highlight);
 
   summary {
     padding: .75rem 1.25rem;
@@ -1224,6 +1348,10 @@ article video {
     box-shadow: 0 0 0 3px tint(25%);
     outline: none;
   }
+
+  &:hover:not(:focus) {
+    border-color: var(--bd-strong);
+  }
 }
 
 
@@ -1254,6 +1382,8 @@ article video {
   }
 
   button {
+    @extend %btn-primary;
+
     display: flex;
     align-items: center;
 
@@ -1313,12 +1443,13 @@ article video {
     padding: .75rem 1rem;
 
     background: var(--row);
-    border: 1px solid transparent;
+    border: 1px solid var(--bd);
     border-radius: $radius;
     color: var(--heading);
 
     &:hover {
       background: var(--row-hover);
+      border-color: var(--bd-strong);
     }
 
     // Icon box
@@ -1329,8 +1460,9 @@ article video {
       height: 2.75rem;
       padding: .7rem;
 
-      background: tint(20%);
+      background: tint(12%);
       border-radius: $radius-sm;
+      box-shadow: inset 0 0 0 1px tint(25%);
       fill: var(--accent);
     }
 
@@ -1371,21 +1503,16 @@ article video {
   }
 
   input[type=submit] {
+    @extend %btn-primary;
+
     align-self: flex-start;
 
     padding: .75rem 2rem;
 
-    background: var(--accent);
-    border-color: var(--accent);
-    border-radius: $radius;
-    color: var(--on-accent);
+    border-radius: $radius-sm;
 
     font-family: $body-font;
     font-size: 1rem;
-
-    &:hover {
-      opacity: .85;
-    }
   }
 }
 
@@ -1401,7 +1528,7 @@ body > footer {
 
   color: var(--muted);
 
-  font-size: .875rem;
+  font-size: .8125rem;
   line-height: 1.8;
   text-align: center;
 
@@ -1409,18 +1536,29 @@ body > footer {
     margin: .25rem 0;
   }
 
-  a:hover {
-    opacity: .8;
+  a {
+    color: var(--muted);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+    text-underline-offset: 3px;
+
+    transition:
+      color .15s ease,
+      text-decoration-color .15s ease;
+
+    &:hover {
+      color: var(--heading);
+      opacity: 1;
+      text-decoration-color: currentColor;
+    }
   }
 }
 
-// Dark/light mode button and accent color menu
+// Dark/light mode button and accent color menu, in the header
 .mode-picker {
   display: flex;
-  justify-content: center;
-  gap: .75rem;
-
-  margin: 1.25rem 0 0;
+  align-items: center;
+  gap: .5rem;
 }
 
 .mode-toggle,
@@ -1429,14 +1567,15 @@ body > footer {
   align-items: center;
   justify-content: center;
 
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.25rem;
+  height: 2.25rem;
   margin: 0;
   padding: 0;
 
-  background: var(--row);
+  background: var(--surface);
   border: 1px solid var(--bd);
-  border-radius: $radius-full;
+  border-radius: .6875rem;
+  box-shadow: var(--highlight);
   color: var(--fg);
 
   transition:
@@ -1451,8 +1590,8 @@ body > footer {
 }
 
 .mode-toggle svg {
-  width: 1.125rem;
-  height: 1.125rem;
+  width: 1.0625rem;
+  height: 1.0625rem;
 }
 
 // Show the mode the button switches to
@@ -1467,8 +1606,8 @@ html[data-mode='light'] .mode-toggle .icon-sun {
 
 .accent-toggle {
   span {
-    width: 1.125rem;
-    height: 1.125rem;
+    width: .875rem;
+    height: .875rem;
 
     background: var(--accent);
     border-radius: $radius-full;
@@ -1480,27 +1619,27 @@ html[data-mode='light'] .mode-toggle .icon-sun {
   }
 }
 
+// Opens below the button, lined up with its right edge
 .accent-menu {
   position: absolute;
-  bottom: calc(100% + .75rem);
-  left: 50%;
+  top: calc(100% + .75rem);
+  right: 0;
   z-index: 10;
 
   width: max-content;
   padding: 1rem;
 
   background: var(--card);
-  border: 1px solid var(--bd);
-  border-radius: $radius;
+  border: 1px solid var(--bd-strong);
+  border-radius: $radius-lg;
   box-shadow:
-    0 20px 40px -12px rgba(0, 0, 0, .45),
-    0 0 0 1px rgba(0, 0, 0, .05);
+    0 32px 64px -16px rgba(0, 0, 0, .5),
+    var(--highlight);
 
   line-height: 1.2;
   text-align: left;
 
-  transform: translateX(-50%);
-  animation: pop-in .15s ease-out;
+  animation: pop-in .2s $ease-out;
 
   &[hidden] {
     display: none;
@@ -1608,14 +1747,14 @@ html[data-mode='light'] .mode-toggle .icon-sun {
     color .15s ease;
 
   &:hover {
-    background: var(--row);
+    background: var(--row-hover);
     color: var(--heading);
   }
 }
 
 @keyframes pop-in {
-  from { opacity: 0; transform: translate(-50%, 6px) scale(.98); }
-  to   { opacity: 1; transform: translate(-50%, 0) scale(1); }
+  from { opacity: 0; transform: translateY(-6px) scale(.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 
@@ -1702,7 +1841,7 @@ dd {
 
 // ANIMATION
 @keyframes fade-in {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
@@ -1743,11 +1882,20 @@ dd {
     font-size: 1rem;
   }
 
+  // The header scrolls away on phones, and the menu gets a row of its own
   body > header {
-    padding-top: 2rem;
+    position: static;
+
+    nav {
+      order: 1;
+      flex-basis: 100%;
+    }
   }
 
-  body > header > a,
+  html {
+    scroll-padding-top: 1rem;
+  }
+
   h1 {
     font-size: 1.875rem;
   }

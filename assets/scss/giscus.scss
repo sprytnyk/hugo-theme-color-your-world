@@ -6,7 +6,8 @@
 // here. main.js passes the visitor's accent to giscus by setting it again,
 // so every accent shade below has to come from the variable
 
-@import 'colors/variables';
+@import 'colors/variables',
+        'defaults';
 
 // Whatever isn't set below (code highlighting, alerts...)
 // comes from giscus's high contrast theme
@@ -16,6 +17,8 @@ $accent:     {{ .accent }};
 $fg:         ${{ .mode }}-foreground;
 $muted:      ${{ .mode }}-muted;
 $card:       ${{ .mode }}-card;
+$surface:    ${{ .mode }}-surface;
+$background: ${{ .mode }}-background;
 $border:     ${{ .mode }}-border;
 $row:        ${{ .mode }}-row;
 $row-hover:  ${{ .mode }}-row-hover;
@@ -30,7 +33,9 @@ main {
   --color-fg-muted: #{$muted};
   --color-fg-subtle: #{$muted};
 
-  --color-canvas-default: #{$card};
+  // The color the see-through card shows over the page, so the comments
+  // blend into their card
+  --color-canvas-default: #{mix(opacify($surface, 1), $background, alpha($surface) * 100%)};
   --color-canvas-overlay: #{$card};
   --color-canvas-inset: #{$input-bg};
   --color-canvas-subtle: #{$row};

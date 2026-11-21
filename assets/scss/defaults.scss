@@ -1,0 +1,27 @@
+// Fallbacks for variables that newer versions of the theme added
+//
+// Sites can override "colors/variables.scss" and "base/variables.scss"
+// with their own copies. A copy made before these variables existed
+// doesn't set them, and the build would stop with "Undefined variable".
+// "!default" only sets a variable that's still missing, and most of them
+// come from the site's own palette
+
+// colors/variables.scss
+$dark-surface:          rgba($dark-card, .6) !default;
+$dark-border-strong:    $dark-border !default;
+$dark-highlight:        inset 0 1px 0 rgba(255, 255, 255, .04) !default;
+$dark-header:           rgba($dark-background, .65) !default;
+$dark-dots:             rgba($dark-muted, .1) !default;
+$dark-segment:          $dark-row !default;
+$dark-segment-on:       $dark-row-hover !default;
+
+$light-surface:         rgba($light-card, .8) !default;
+$light-border-strong:   $light-border !default;
+$light-highlight:       inset 0 1px 0 rgba(255, 255, 255, .9) !default;
+$light-header:          rgba($light-background, .7) !default;
+$light-dots:            rgba($light-heading, .08) !default;
+$light-segment:         $light-row !default;
+$light-segment-on:      $light-card !default;
+
+// base/variables.scss
+$ease-out: cubic-bezier(.2, .7, .2, 1) !default;

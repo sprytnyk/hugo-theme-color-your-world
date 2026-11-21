@@ -1,3 +1,5 @@
+<!-- Dark/light mode button and accent color menu, shown in the header -->
+
 <!-- Get SVG bundle -->
 {{ $svgBundleLink := (partialCached "svg-bundle" .) }}
 
@@ -40,10 +42,3 @@
     </div>
   </div>
 </div>
-
-<!-- noscript notice -->
-{{ if .Site.Params.hasNoscriptNotice }}
-  <noscript>
-    <p class="noscript">{{ T "noscript" }}</p>
-  </noscript>
-{{ end }}

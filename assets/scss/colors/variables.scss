@@ -1,47 +1,69 @@
 // Palettes based on Tailwind's "slate" scale
 
 // Dark mode palette
-$dark-background:         #0f172a; // slate-900
-$dark-background-alt:     #1e293b; // slate-800
+$dark-background:         #020617; // slate-950
+$dark-background-alt:     #0f172a; // slate-900
 $dark-foreground:         #cbd5e1; // slate-300
-$dark-heading:            #ffffff;
+$dark-heading:            #f8fafc; // slate-50
 $dark-muted:              #94a3b8; // slate-400
 
-$dark-card:               #1e293b; // slate-800
-$dark-border:             #334155; // slate-700
-$dark-row:                rgba(51, 65, 85, .5);
-$dark-row-hover:          #334155;
+// Solid card color, for menus and the comments
+$dark-card:               #0f172a; // slate-900
+// See-through card color, for the cards on the page
+$dark-surface:            rgba(15, 23, 42, .6);
+$dark-border:             rgba(148, 163, 184, .12);
+$dark-border-strong:      rgba(148, 163, 184, .22);
+$dark-row:                rgba(30, 41, 59, .4);
+$dark-row-hover:          rgba(51, 65, 85, .5);
 
 $dark-error-color:        #fb7185; // rose-400
 $dark-on-accent:          #0f172a;
 
-$dark-input-background:   #0f172a;
+$dark-input-background:   rgba(2, 6, 23, .6);
 $dark-input-foreground:   #f1f5f9;
-$dark-input-border:       #334155;
+$dark-input-border:       rgba(148, 163, 184, .18);
 
-$dark-shadow:             0 25px 50px -12px rgba(0, 0, 0, .25);
+$dark-shadow:             0 12px 40px -16px rgba(0, 0, 0, .8);
+// Thin light line along the top edge of cards and buttons
+$dark-highlight:          inset 0 1px 0 rgba(255, 255, 255, .04);
+
+// See-through header
+$dark-header:             rgba(2, 6, 23, .65);
+// Faint dot grid behind the page
+$dark-dots:               rgba(148, 163, 184, .1);
+// Pill switch of the menu
+$dark-segment:            rgba(30, 41, 59, .6);
+$dark-segment-on:         #334155; // slate-700
 
 
 // Light mode palette
 $light-background:        #f8fafc; // slate-50
 $light-background-alt:    #e2e8f0; // slate-200
 $light-foreground:        #334155; // slate-700
-$light-heading:           #0f172a; // slate-900
+$light-heading:           #020617; // slate-950
 $light-muted:             #64748b; // slate-500
 
 $light-card:              #ffffff;
-$light-border:            #e2e8f0; // slate-200
+$light-surface:           rgba(255, 255, 255, .8);
+$light-border:            rgba(15, 23, 42, .08);
+$light-border-strong:     rgba(15, 23, 42, .14);
 $light-row:               #f1f5f9; // slate-100
-$light-row-hover:         #e2e8f0;
+$light-row-hover:         #e2e8f0; // slate-200
 
 $light-error-color:       #e11d48; // rose-600
 $light-on-accent:         #ffffff;
 
 $light-input-background:  #ffffff;
 $light-input-foreground:  #0f172a;
-$light-input-border:      #cbd5e1; // slate-300
+$light-input-border:      rgba(15, 23, 42, .12);
 
-$light-shadow:            0 20px 40px -16px rgba(15, 23, 42, .15);
+$light-shadow:            0 1px 2px rgba(15, 23, 42, .04), 0 12px 32px -16px rgba(15, 23, 42, .16);
+$light-highlight:         inset 0 1px 0 rgba(255, 255, 255, .9);
+
+$light-header:            rgba(248, 250, 252, .7);
+$light-dots:              rgba(15, 23, 42, .08);
+$light-segment:           rgba(15, 23, 42, .05);
+$light-segment-on:        #ffffff;
 
 
 // Lazy way to deter images that can be too bright

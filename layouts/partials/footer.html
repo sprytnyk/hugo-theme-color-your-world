@@ -36,5 +36,9 @@
 
 {{ end }}
 
-<!-- Dark/light mode button and color picker -->
-{{ partialCached "footer-opt" . }}
+<!-- noscript notice -->
+{{ if .Site.Params.hasNoscriptNotice }}
+  <noscript>
+    <p class="noscript">{{ T "noscript" }}</p>
+  </noscript>
+{{ end }}
