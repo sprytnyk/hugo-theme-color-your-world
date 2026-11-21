@@ -124,6 +124,18 @@ func TestTranslation(t *testing.T) {
 	mainSite(t).has("uk/"+post, `<h2>Джерела</h2>`)
 }
 
+func TestLanguageSwitcher(t *testing.T) {
+	t.Run("links to the translation", func(t *testing.T) {
+		mainSite(t).has(post, `href="/uk/posts/sample/"[^>]*>УКР</a>`)
+	})
+	t.Run("marks the current language", func(t *testing.T) {
+		mainSite(t).has("uk/"+post, `aria-current="true">УКР</a>`)
+	})
+	t.Run("falls back to the home page", func(t *testing.T) {
+		mainSite(t).has("about/index.html", `href="/uk/"[^>]*>УКР</a>`)
+	})
+}
+
 func TestSearch(t *testing.T) {
 	t.Run("page is built", func(t *testing.T) {
 		mainSite(t).exists("search/index.html")
