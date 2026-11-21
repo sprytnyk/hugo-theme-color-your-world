@@ -3,6 +3,10 @@
   language. Each link goes to this page in that language, or to that
   language's home page when there's no translation. The label is the first
   three letters of languageName, or languageLabel from the language's params.
+
+  When each language has its own baseURL (multihost), a path would stay on
+  the current domain, so the links are full URLs. Other sites keep paths, so
+  a preview on another domain doesn't jump to the live site.
 -->
 {{ $page := . }}
 {{ $homes := site.Home.AllTranslations }}
@@ -18,11 +22,12 @@
           {{ end }}
         {{ end }}
 
+        {{ $url := cond hugo.IsMultihost $target.Permalink $target.RelPermalink }}
         {{ $lang := .Language }}
         {{ $label := .Site.Params.languageLabel | default (upper (substr $lang.LanguageName 0 3)) }}
         {{ $isCurrent := eq $lang.Lang $page.Language.Lang }}
         <li>
-          <a href="{{ $target.RelPermalink }}" lang="{{ $lang.Lang }}" hreflang="{{ $lang.Lang }}" title="{{ $lang.LanguageName }}"{{ if $isCurrent }} aria-current="true"{{ else }} rel="alternate"{{ end }}>{{ $label }}</a>
+          <a href="{{ $url }}" lang="{{ $lang.Lang }}" hreflang="{{ $lang.Lang }}" title="{{ $lang.LanguageName }}"{{ if $isCurrent }} aria-current="true"{{ else }} rel="alternate"{{ end }}>{{ $label }}</a>
         </li>
       {{ end }}
     </ul>
