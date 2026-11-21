@@ -44,7 +44,7 @@ This is a fork of [Color Your World](https://gitlab.com/rmaguiar/hugo-theme-colo
 * Math via [KaTeX](https://katex.org/);
 * Social links for centralized and decentralized platforms, and a contact form via [Formspree](https://formspree.io/);
 * Open Graph, Twitter Cards and Schema.org meta tags, plus `rel="me"` links;
-* Multilingual sites, with English, German, Portuguese and Ukrainian translations;
+* Multilingual sites, with a language switch in the header and English, German, Portuguese and Ukrainian translations;
 * Visible focus outlines for keyboard users;
 * Everything works without JavaScript except search, comments, KaTeX and the color picker;
 * No Google Analytics, Google Fonts or Disqus.
@@ -150,6 +150,17 @@ Links, buttons, tags and highlights use the accent color. Visitors can change it
 ```
 
 Use 6-digit hex colors, like `#2563eb`. The visitor's browser saves their choice, separately for each mode.
+
+### Language switch
+
+On multilingual sites, the header shows a switch with one button per language. A button opens the same page in that language. If the page isn't translated, it opens that language's home page.
+
+The buttons show the first three letters of each `languageName`, like `ENG` and `УКР`. To pick your own:
+
+```toml
+[languages.en.params]
+  languageLabel = "EN"
+```
 
 ### Fonts
 
