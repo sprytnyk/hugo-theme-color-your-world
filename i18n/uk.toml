@@ -159,11 +159,8 @@ other = "Знайдено забагато сторінок. Спробуйте 
 
 # Translations
 
-[alsoAvailable]
-other = "Також доступно"
-
-[and]
-other = " та "
+[ariaLanguages]
+other = "Мови."
 
 
 # Misc

@@ -159,11 +159,8 @@ other = "Muitas páginas encontradas. Por favor, tente repetir a busca usando ou
 
 # Translations
 
-[alsoAvailable]
-other = "Também disponível em"
-
-[and]
-other = " e "
+[ariaLanguages]
+other = "Idiomas."
 
 
 # Misc

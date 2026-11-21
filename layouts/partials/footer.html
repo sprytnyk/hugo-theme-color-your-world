@@ -18,24 +18,6 @@
 
 {{ end }}
 
-<!--
-  TODO
-  Maybe I should rethink this
--->
-
-{{ if gt (len .Translations) 0 }}
-
-  {{ $processedLangs := slice }}
-
-  {{ range .Translations }}
-    {{ $currentLang := printf `<a rel="alternate" hreflang="%s" href="%s">%s</a>` .Language.Lang .RelPermalink .Language.LanguageName }}
-    {{ $processedLangs = $processedLangs | append $currentLang }}
-  {{ end }}
-
-  <p>{{ T "alsoAvailable" }}: {{ delimit $processedLangs ", " (T "and") | safeHTML }}.</p>
-
-{{ end }}
-
 <!-- noscript notice -->
 {{ if .Site.Params.hasNoscriptNotice }}
   <noscript>

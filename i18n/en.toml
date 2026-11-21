@@ -159,11 +159,8 @@ other = "Too many pages found. Please try to repeat the search using another ter
 
 # Translations
 
-[alsoAvailable]
-other = "Also available in"
-
-[and]
-other = " and "
+[ariaLanguages]
+other = "Languages."
 
 
 # Misc

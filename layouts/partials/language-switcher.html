@@ -1,0 +1,30 @@
+<!--
+  Language switch in the header, shown when the site has more than one
+  language. Each link goes to this page in that language, or to that
+  language's home page when there's no translation. The label is the first
+  three letters of languageName, or languageLabel from the language's params.
+-->
+{{ $page := . }}
+{{ $homes := site.Home.AllTranslations }}
+
+{{ if gt (len $homes) 1 }}
+  <nav class="languages" aria-label="{{ T "ariaLanguages" }}">
+    <ul>
+      {{ range $homes }}
+        {{ $target := . }}
+        {{ range $page.AllTranslations }}
+          {{ if eq .Language.Lang $target.Language.Lang }}
+            {{ $target = . }}
+          {{ end }}
+        {{ end }}
+
+        {{ $lang := .Language }}
+        {{ $label := .Site.Params.languageLabel | default (upper (substr $lang.LanguageName 0 3)) }}
+        {{ $isCurrent := eq $lang.Lang $page.Language.Lang }}
+        <li>
+          <a href="{{ $target.RelPermalink }}" lang="{{ $lang.Lang }}" hreflang="{{ $lang.Lang }}" title="{{ $lang.LanguageName }}"{{ if $isCurrent }} aria-current="true"{{ else }} rel="alternate"{{ end }}>{{ $label }}</a>
+        </li>
+      {{ end }}
+    </ul>
+  </nav>
+{{ end }}

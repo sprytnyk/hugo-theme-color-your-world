@@ -159,11 +159,8 @@ other = "Zu viele Seiten gefunden Versuche es mit einem anderen Begriff."
 
 # Translations
 
-[alsoAvailable]
-other = "Auch verfügbar auf"
-
-[and]
-other = " und "
+[ariaLanguages]
+other = "Sprachen."
 
 
 # Misc
