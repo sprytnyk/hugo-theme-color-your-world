@@ -79,6 +79,9 @@ var (
 
 	// mainSite with baseURL = "/"
 	rootSite = fixture("root", giscus("params.giscus"), "--baseURL", "/")
+
+	// mainSite with a domain for each language, from testdata/site/multihost.toml
+	multihostSite = fixture("multihost", giscus("params.giscus"), "--config", "hugo.toml,multihost.toml")
 )
 
 // fixture returns a function that hands a built site to a test. It builds the

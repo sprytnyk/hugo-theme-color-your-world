@@ -1,0 +1,8 @@
+# Only the multihost test reads this file, on top of hugo.toml. It gives each
+# language its own domain.
+
+[languages.en]
+  baseURL = "https://en.example.org/"
+
+[languages.uk]
+  baseURL = "https://uk.example.org/"

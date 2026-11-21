@@ -134,6 +134,9 @@ func TestLanguageSwitcher(t *testing.T) {
 	t.Run("falls back to the home page", func(t *testing.T) {
 		mainSite(t).has("about/index.html", `href="/uk/"[^>]*>УКР</a>`)
 	})
+	t.Run("links to the other domain when each language has one", func(t *testing.T) {
+		multihostSite(t).has("en/"+post, `href="https://uk\.example\.org/posts/sample/"[^>]*>УКР</a>`)
+	})
 }
 
 func TestSearch(t *testing.T) {
