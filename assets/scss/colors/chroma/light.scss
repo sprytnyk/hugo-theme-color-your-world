@@ -1,10 +1,10 @@
-// Based on Solarized Dark (pygments-high-contrast-stylesheets)
-// Source: https://github.com/mpchadwick/pygments-high-contrast-stylesheets/blob/gh-pages/solarized-dark.css
+// Solarized Light. The Solarized colors are darkened just enough to pass
+// WCAG AA (4.5:1) on the code background, highlighted lines included
 
 .chroma,
 pre {
-  color: #93a1a1;
-  background-color: $code-background;
+  color: #576d74;
+  background-color: $light-code-background;
 }
 
 // Inline code stays light, so it doesn't stand out too much in the text
@@ -37,11 +37,11 @@ th code {
 .chroma .hl {
   display: block;
   width: 100%;
-  background-color: rgba(0,0,0,.3);
+  background-color: rgba(15, 23, 42, .06);
 }
 
 .chroma .nb {
-  color: #b58900;
+  color: #856400;
 }
 
 .chroma .ge {
@@ -49,7 +49,7 @@ th code {
 }
 
 .chroma .gr {
-  color: #e8625f;
+  color: #ca2522;
   font-weight: bold;
 }
 
@@ -64,14 +64,14 @@ th code {
 .chroma .ne,
 .chroma .se,
 .chroma .gh {
-  color: #e9662f;
+  color: #b64314;
 }
 
 .chroma .lnt,
 .chroma .ln {
   margin-right: 0.5rem;
   padding: 0 0.5rem 0 1.5rem;
-  color: #848f8f;
+  color: #5d6b6b;
 }
 
 .chroma .k,
@@ -83,7 +83,7 @@ th code {
 .chroma .cp,
 .chroma .cpf,
 .chroma .gi {
-  color: #859900;
+  color: #627000;
 }
 
 .chroma .kd,
@@ -95,13 +95,13 @@ th code {
 .chroma .nt,
 .chroma .nv,
 .chroma .gu {
-  color: #3294da;
+  color: #1e6ea7;
 }
 
 .chroma .kt,
 .chroma .sr,
 .chroma .gd {
-  color: #e8625f;
+  color: #ca2522;
 }
 
 .chroma .s,
@@ -120,7 +120,7 @@ th code {
 .chroma .mi,
 .chroma .il,
 .chroma .mo {
-  color: #2aa198;
+  color: #1e756e;
 }
 
 .chroma .sb,
@@ -128,5 +128,6 @@ th code {
 .chroma .ch,
 .chroma .cm,
 .chroma .c1 {
-  color: #759299;
+  color: #5d6b6b;
+  font-style: italic;
 }

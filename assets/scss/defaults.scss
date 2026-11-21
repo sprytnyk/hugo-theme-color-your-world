@@ -23,5 +23,8 @@ $light-dots:            rgba($light-heading, .08) !default;
 $light-segment:         $light-row !default;
 $light-segment-on:      $light-card !default;
 
+// Light, since the light mode code colors are dark
+$light-code-background: $light-background !default;
+
 // base/variables.scss
 $ease-out: cubic-bezier(.2, .7, .2, 1) !default;
