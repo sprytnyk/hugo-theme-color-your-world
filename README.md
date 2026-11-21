@@ -4,7 +4,7 @@
 [![License](https://badgen.net/badge/license/MIT/blue)](LICENSE)
 [![Tests](https://github.com/sprytnyk/hugo-theme-color-your-world/actions/workflows/tests.yml/badge.svg)](https://github.com/sprytnyk/hugo-theme-color-your-world/actions/workflows/tests.yml)
 
-A [Hugo](https://gohugo.io/) theme for personal sites and technical blogs. It has dark and light modes in slate colors, puts content on rounded cards, and lets visitors pick their own accent color. It has no analytics and loads no web fonts.
+A [Hugo](https://gohugo.io/) theme for personal sites and technical blogs. It has dark and light modes in slate colors, puts content on see-through rounded cards under a sticky header, and lets visitors pick their own accent color. It has no analytics and loads no web fonts.
 
 This is a fork of [Color Your World](https://gitlab.com/rmaguiar/hugo-theme-color-your-world) by Raphael Aguiar, with a new design, bug fixes and video support. If you're switching from the original, see [Upgrading from the original theme](#upgrading-from-the-original-theme).
 
@@ -33,7 +33,7 @@ This is a fork of [Color Your World](https://gitlab.com/rmaguiar/hugo-theme-colo
 
 * Dark and light modes. The theme follows the system setting or a site default, and visitors can switch;
 * An accent color picker with your own presets and any custom color, saved per mode;
-* System fonts, so visitors download no web fonts;
+* System fonts, so visitors download no web fonts. If the visitor has Inter installed, the theme uses it;
 * A wide content column, so about 90 columns of code fit on desktop without scrolling;
 * Syntax highlighting in Monokai and Solarized styles that pass WCAG AA contrast;
 * Videos in posts, with Markdown or a shortcode;
@@ -128,13 +128,13 @@ hugo --minify
   ignoreSystemSettings = false
 ```
 
-The theme picks the mode in this order: the visitor's choice from the footer button, then the system setting, then `isDark`.
+The theme picks the mode in this order: the visitor's choice from the header button, then the system setting, then `isDark`.
 
 Both palettes are in `assets/scss/colors/variables.scss`, based on [Tailwind's](https://tailwindcss.com/docs/colors) *slate* colors. To change them, copy that file to the same path in your site and edit it.
 
 ### Accent color
 
-Links, buttons, tags and highlights use the accent color. Visitors can change it from the footer:
+Links, buttons, tags and highlights use the accent color. Visitors can change it from the header:
 
 ![Accent color menu.](images/color-picker.png)
 
@@ -153,7 +153,7 @@ Use 6-digit hex colors, like `#2563eb`. The visitor's browser saves their choice
 
 ### Fonts
 
-The theme uses the system font stack, starting with `system-ui`, so visitors download no font files.
+The theme uses Inter if the visitor has it installed, and the system font (`system-ui`) otherwise, so visitors download no font files.
 
 To self-host fonts instead:
 
@@ -165,7 +165,7 @@ To self-host fonts instead:
 
 ![Syntax highlighting in dark and light modes.](images/syntax-highlight.png)
 
-Code uses Monokai in dark mode and Solarized Dark in light mode, both on a slate background. The colors come from [pygments-high-contrast-stylesheets](https://github.com/mpchadwick/pygments-high-contrast-stylesheets) and pass WCAG AA. Tabs are 4 columns wide.
+Code uses Monokai on a dark slate background in dark mode, and Solarized Light on a light background in light mode. The Monokai colors come from [pygments-high-contrast-stylesheets](https://github.com/mpchadwick/pygments-high-contrast-stylesheets). The Solarized colors are darker than the originals, so they stay readable on a light background. Both pass WCAG AA. Tabs are 4 columns wide.
 
 This needs `noClasses = false` under `[markup.highlight]` in your config. The styles are `dark.scss` and `light.scss` in `assets/scss/colors/chroma/`.
 
@@ -657,7 +657,7 @@ The tests build a site that uses most of the theme's features, then check the HT
 go -C tests test -count=1 ./...
 ```
 
-They need Go and Hugo Extended. One test opens the site in headless Chromium, and is skipped without it. A build that prints a warning fails the tests.
+They need Go and Hugo Extended. One test opens the site in headless Chromium, and skips itself if Chromium isn't installed. A build that prints a warning fails the tests.
 
 GitHub runs them on every push and every pull request, with the oldest Hugo the theme supports and the newest it's tested with.
 
