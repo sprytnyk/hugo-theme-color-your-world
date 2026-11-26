@@ -3,7 +3,7 @@
 [![Hugo](https://img.shields.io/badge/Hugo%20Extended-%E2%89%A50.141.0-ff4088?logo=hugo)](https://gohugo.io/)
 [![License](https://badgen.net/badge/license/MIT/blue)](LICENSE)
 [![Tests](https://github.com/sprytnyk/hugo-theme-color-your-world/actions/workflows/tests.yml/badge.svg)](https://github.com/sprytnyk/hugo-theme-color-your-world/actions/workflows/tests.yml)
-![AI Generated](https://img.shields.io/badge/AI-generated-orange)
+![AI-assisted](https://img.shields.io/badge/AI-assisted-orange)
 
 A [Hugo](https://gohugo.io/) theme for personal sites and technical blogs. It has dark and light modes in slate colors, puts content on see-through rounded cards under a sticky header, and lets visitors pick their own accent color. It has no analytics and loads no web fonts.
 
